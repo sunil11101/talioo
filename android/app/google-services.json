@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "674264708413",
+    "firebase_url": "https://travel-hour.firebaseio.com",
+    "project_id": "travel-hour",
+    "storage_bucket": "travel-hour.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674264708413:android:dc226121f5678d9b",
+        "android_client_info": {
+          "package_name": "com.mrblab.travel_hour"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674264708413-c33uverghv2thism19fc2umo23kgr47i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrblab.travel_hour",
+            "certificate_hash": "cb8e5d2a8862b077b36ca8d450115c793e1b767a"
+          }
+        },
+        {
+          "client_id": "674264708413-mfs9i0aaarqgsj9hhht1godete2dlt6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRiEBFybLUjYHyzGzRePd_VzBzv5d435o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674264708413-mfs9i0aaarqgsj9hhht1godete2dlt6e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "674264708413-mu0o4jah8e3107kfvkgu6elcj8m5tgeb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mrblab.travel-hour"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
