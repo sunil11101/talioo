@@ -77,7 +77,7 @@ class Page1 extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(
-              height: 30,
+              height: 50,
             ),
             Container(
               alignment: Alignment.center,
@@ -93,17 +93,17 @@ class Page1 extends StatelessWidget {
             
             Text(
               'No matter where you are',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
         ],
@@ -126,7 +126,7 @@ class Page2 extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(
-              height: 30,
+              height: 50,
             ),
             Container(
               alignment: Alignment.center,
@@ -142,17 +142,17 @@ class Page2 extends StatelessWidget {
             
             Text(
               'No matter where you are',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
         ],
@@ -176,7 +176,7 @@ class Page3 extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(
-              height: 30,
+              height: 50,
             ),
             Container(
               alignment: Alignment.center,
@@ -192,17 +192,17 @@ class Page3 extends StatelessWidget {
             
             Text(
               'No matter where you are',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
 
@@ -217,7 +217,7 @@ class Page3 extends StatelessWidget {
                   BoxShadow(
                     blurRadius: 2,
                     offset: Offset(3, 3),
-                    color: Colors.blue[200]
+                    color: Colors.blue[100]
                   )
                 ]
               ),

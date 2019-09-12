@@ -61,8 +61,9 @@ class _DetailsPageState extends State<DetailsPage> {
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                     color: Colors.grey[300],
-                                    blurRadius: 50,
-                                    offset: Offset(5, 5))
+                                    blurRadius: 20,
+                                    offset: Offset(5, 5)
+                                    )
                               ]),
                         ),
 
@@ -90,9 +91,9 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             child: Carousel(
                               dotBgColor: Colors.transparent,
-                              showIndicator: false,
+                              showIndicator: true,
                               dotSize: 5,
-                              dotPosition: DotPosition.bottomRight,
+                              
                               boxFit: BoxFit.cover,
                               images: [
                                 NetworkImage(
@@ -113,33 +114,36 @@ class _DetailsPageState extends State<DetailsPage> {
 
                        
 
-                        Positioned(
-                          left: 10,
-                          bottom: 130,
-                          child: FlatButton.icon(
-                            icon: Icon(
-                              LineIcons.eye,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            label: Text(
-                              '$views views',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
+                        // Positioned(
+                        //   left: 10,
+                        //   bottom: 130,
+                        //   child: FlatButton.icon(
+                        //     icon: Icon(
+                        //       LineIcons.eye,
+                        //       color: Colors.white,
+                        //       size: 30,
+                        //     ),
+                        //     label: Text(
+                        //       '$views views',
+                        //       style:
+                        //           TextStyle(color: Colors.white, fontSize: 16),
+                        //     ),
+                        //     onPressed: () {},
+                        //   ),
+                        // ),
 
                         Positioned(
-                          top: 40,
-                          left: 10,
-                          child: IconButton(
-                            icon: Icon(
-                              LineIcons.arrow_left,
-                              color: Colors.white,
+                          top: 50,
+                          left: 15,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue.withOpacity(0.9),
+                                                      child: IconButton(
+                              icon: Icon(
+                                LineIcons.arrow_left,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
                             ),
-                            onPressed: () {},
                           ),
                         ),
 
@@ -199,11 +203,23 @@ class _DetailsPageState extends State<DetailsPage> {
                                     ),
                                     Expanded(
                                       child: Container(
+                                        alignment: Alignment.centerLeft,
                                         width: w * 0.80,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
+                                              
                                           children: <Widget>[
+                                             Icon(
+                                              LineIcons.eye,
+                                              size: 20,
+                                              color: Colors.pinkAccent,
+                                            ),
+                                            Text(' $loves',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.pinkAccent)),
+                                            SizedBox(width: 40,),
                                             Icon(
                                               LineIcons.heart,
                                               size: 20,
@@ -214,7 +230,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                     fontSize: 16,
                                                     color: Colors.pinkAccent)),
                                             
-                                            SizedBox(width: 50,),
+                                            SizedBox(width: 40,),
                                             Icon(
                                               LineIcons.comment_o,
                                               size: 20,

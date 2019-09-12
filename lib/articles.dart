@@ -34,7 +34,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text('Travel Hour Blog'),
-          elevation: 2,
+          elevation: 0.5,
           actions: <Widget>[
             IconButton(icon: Icon(LineIcons.sort), onPressed: () {},)
           ],

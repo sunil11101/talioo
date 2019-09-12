@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:travel_hour/variables.dart';
 
 
@@ -21,8 +20,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          leading: Icon(LineIcons.bookmark),
-          titleSpacing: 0,
+          automaticallyImplyLeading: false,
+          //leading: Icon(LineIcons.bookmark),
+          //titleSpacing: 10,
           backgroundColor: Colors.white,
           elevation: 1,
           title: Text('Bookmarked Items'),

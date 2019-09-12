@@ -10,6 +10,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="travel_hour"
         android:icon="@mipmap/ic_launcher">
+
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBIpsUWwJOPEKG__XseggNiYlcVs1DrItk"/>
+               
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

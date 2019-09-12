@@ -25,6 +25,12 @@ dependencies:
   
   
   firebase_database: ^3.0.7
+  firebase_auth: ^0.14.0+5
+  google_sign_in: ^4.0.7
+  shared_preferences: ^0.5.3+4
+  google_maps_flutter: ^0.5.21
+  
+  cached_network_image: ^1.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -32,6 +38,10 @@ dependencies:
   carousel_pro: ^1.0.0
   flare_flutter: any
   line_icons: ^0.2.0
+  dots_indicator: ^1.0.0
+  
+  like_button: ^0.1.9
+
   
   
 

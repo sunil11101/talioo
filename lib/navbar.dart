@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:travel_hour/account.dart';
 import 'package:travel_hour/articles.dart';
 import 'package:travel_hour/bookmark.dart';
 import 'package:travel_hour/home1.dart';
@@ -25,10 +24,11 @@ class _NavBarPageState extends State<NavBarPage> {
 
   BottomNavigationBar navbar() {
     return BottomNavigationBar(
-      iconSize: 23,
+
+      iconSize: 25,
       selectedItemColor: Colors.black,
       selectedIconTheme: IconThemeData(color: Colors.black, size: 26),
-      showSelectedLabels: true,
+      showSelectedLabels: false,
       showUnselectedLabels: false,
       unselectedIconTheme: IconThemeData(color: Colors.grey),
       elevation: 3,
@@ -46,11 +46,7 @@ class _NavBarPageState extends State<NavBarPage> {
               LineIcons.bookmark_o,
             ),
             title: new Text('Bookmark')),
-        BottomNavigationBarItem(
-            icon: Icon(
-              LineIcons.user,
-            ),
-            title: new Text('Account')),
+        
         BottomNavigationBarItem(
             icon: Icon(
               LineIcons.list,
@@ -72,13 +68,9 @@ class _NavBarPageState extends State<NavBarPage> {
           });
         }
 
-        if(index == 2){
-          setState(() {
-            page = AccountPage();
-          });
-        }
+        
 
-        if(index == 3){
+        if(index == 2){
           setState(() {
             page = ArticlesPage();
           });
