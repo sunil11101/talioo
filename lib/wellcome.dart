@@ -171,7 +171,7 @@ class _WellComePageState extends State<WellComePage> {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
-                'Explore every famous places in Bangladesh with the easiest way. Explore every famous places in Bangladesh with the easiest way',
+                'Explore every famous places in Bangladesh with the easiest way',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: Colors.grey[600]),
               ),
@@ -181,38 +181,28 @@ class _WellComePageState extends State<WellComePage> {
                 height: 45,
                 width: w * 0.80,
                 decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.indigo[100],
-                        blurRadius: 2,
-                        offset: Offset(2, 2)
-                      )
-                    ],
-                    //border: Border.all(color: Colors.grey[400], width: 1),
+                   
+                    border: Border.all(color: Colors.grey[300], width: 1),
                     borderRadius: BorderRadius.circular(25),
-                    // color: Colors.blue[500],
-                    // boxShadow: <BoxShadow> [
-                    //   BoxShadow(
-                    //     color: Colors.blue[100],
-                    //     blurRadius: 2,
-                    //     offset: Offset(5, 5)
-                    //   )
-                    // ]
+                    color: Colors.grey[100],
+                    
                     ),
-                child: FlatButton.icon(
+                child: 
+                
+                FlatButton.icon(
                   padding: EdgeInsets.all(5),
-                  color: Colors.indigoAccent,
+                  
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)),
                   icon: Icon(
                     FontAwesomeIcons.google,
-                    color: Colors.white,
+                    color: Colors.indigoAccent,
                     size: 22,
                   ),
                   label: Text(
                     'Sign In With Google',
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey[800],
                         fontWeight: FontWeight.w600,
                         fontSize: 16),
                   ),
@@ -228,7 +218,8 @@ class _WellComePageState extends State<WellComePage> {
                     
                     
                   },
-                )),
+                )
+                ),
             SizedBox(
               height: h * 0.12,
             )

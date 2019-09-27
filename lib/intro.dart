@@ -1,5 +1,6 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_hour/navbar.dart';
 
 class IntroPage extends StatefulWidget {
@@ -12,7 +13,22 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
 
   
+  String name;
 
+  _getName () async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String _name = sp.getString('userName')?? 'Rakib';
+    setState(() {
+      name = _name;
+    });
+  }
+
+  @override
+  void initState() { 
+    _getName();
+    super.initState();
+    
+  }
     
 
   @override
@@ -24,53 +40,66 @@ class _IntroPageState extends State<IntroPage> {
       body: Column(
         children: <Widget>[
           Container(
-            height: h * 0.91,
+            height: h * 0.80,
             child: Carousel(
-              dotVerticalPadding: h * 0.16,
+              dotVerticalPadding: h * 0.00,
               dotColor: Colors.grey,
               dotIncreasedColor: Colors.blueAccent,
-              autoplay: false,
+              autoplay: true,
               dotBgColor: Colors.transparent,
+              dotSize: 7,
+              
               
               
               images: [
 
-                Page1(),
-                Page2(),
-                Page3()
+                page1(),
+                page2(),
+                page3()
                 
               ],
             ),
           ),
-          Spacer(),
+
+          
+
+          SizedBox(height: h * 0.05,),
+          
           Container(
-            height: 60,
-            width: w,
-            padding: EdgeInsets.all(0),
-            alignment: Alignment.centerRight,
-            //color: Colors.blueAccent,
-            child: FlatButton(
-              child: Text('Skip',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600,color: Colors.grey),), 
-              onPressed: () {
-                Navigator.push(context,
+              height: 45,
+              width: w * 0.70,
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: <BoxShadow> [
+                  BoxShadow(
+                    blurRadius: 2,
+                    offset: Offset(3, 3),
+                    color: Colors.blue[100]
+                  )
+                ]
+              ),
+              child: FlatButton(
+                
+                
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)
+                ),
+                child: Text('Get Started',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600),), onPressed: () {
+                  Navigator.push(context,
                         MaterialPageRoute(builder: (context) => NavBarPage()));
-              },),
-          )
+                },),
+            ),
+
+            SizedBox(height: 0.15,),
+            
         ],
       ),
       
     );
   }
-}
 
-class Page1 extends StatelessWidget {
-  const Page1({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
+  Widget page1 () {
     double h = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -90,6 +119,12 @@ class Page1 extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
+            Text('Hi $name,', style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[600]
+              
+            ),),
             
             Text(
               'No matter where you are',
@@ -103,23 +138,16 @@ class Page1 extends StatelessWidget {
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
         ],
       ),
     );
   }
-}
 
-class Page2 extends StatelessWidget {
-  const Page2({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
+  
+  Widget page2 () {
     double h = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -152,25 +180,17 @@ class Page2 extends StatelessWidget {
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
         ],
       ),
     );
   }
-}
 
-class Page3 extends StatelessWidget {
-  const Page3({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget page3 () {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -202,38 +222,20 @@ class Page3 extends StatelessWidget {
               child: Text(
                 'Access to importent infoemation about your destination before and during your travel',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: Colors.grey[500]),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
             ),
 
-            SizedBox(height: h * 0.17,),
-            Container(
-              height: 45,
-              width: w * 0.70,
-              decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: <BoxShadow> [
-                  BoxShadow(
-                    blurRadius: 2,
-                    offset: Offset(3, 3),
-                    color: Colors.blue[100]
-                  )
-                ]
-              ),
-              child: FlatButton(
-                
-                
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25)
-                ),
-                child: Text('Get Started',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600),), onPressed: () {
-                  Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NavBarPage()));
-                },),
-            )
+            
+            
         ],
       ),
     );
   }
+
 }
+
+
+
+
+

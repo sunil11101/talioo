@@ -12,8 +12,7 @@
         android:icon="@mipmap/ic_launcher">
 
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBIpsUWwJOPEKG__XseggNiYlcVs1DrItk"/>
+
                
         <activity
             android:name=".MainActivity"
@@ -34,5 +33,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA-fE7BtlehhXxsO_sWnHpayWen9Dcg3Bs"/>
     </application>
 </manifest>

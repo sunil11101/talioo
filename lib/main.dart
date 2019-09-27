@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
-import 'package:travel_hour/like_button_test.dart';
+import 'package:flutter/services.dart';
 import 'package:travel_hour/wellcome.dart';
 
 
 void main(){
   
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   //systemNavigationBarColor: Colors.blueAccent,
-  //   //systemNavigationBarIconBrightness: Brightness.dark, // navigation bar color
-  //   statusBarColor: Colors.white,
-  //   statusBarIconBrightness: Brightness.dark // status bar color
-  // ));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //systemNavigationBarColor: Colors.blueAccent,
+    //systemNavigationBarIconBrightness: Brightness.dark, // navigation bar color
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark // status bar color
+  ));
   runApp(MyApp());
 
   
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
           color: Colors.grey[50],
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black,),
-          
+          brightness: Brightness.light,
           textTheme: TextTheme(title: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 18,fontFamily: 'Raleway')),
           
         )
