@@ -1,7 +1,8 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_hour/navbar.dart';
+import 'package:travel_hour/widgets/navbar.dart';
+
 
 class IntroPage extends StatefulWidget {
   const IntroPage({Key key}) : super(key: key);
@@ -87,7 +88,7 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 child: Text('Get Started',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600),), onPressed: () {
                   Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NavBarPage()));
+                        MaterialPageRoute(builder: (context) => NavBar()));
                 },),
             ),
 
@@ -189,7 +190,7 @@ class _IntroPageState extends State<IntroPage> {
   }
 
   Widget page3 () {
-    double w = MediaQuery.of(context).size.width;
+    //double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(10.0),

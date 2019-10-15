@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:travel_hour/data_list.dart';
 
-import 'details.dart';
+
+import 'package:travel_hour/models/places_data.dart';
+import 'package:travel_hour/pages/details.dart';
+
 
 class PlaceListPage extends StatefulWidget {
   final String title;
@@ -68,10 +70,35 @@ class _PlaceListPageState extends State<PlaceListPage> {
     );
   }
 
+  List<PlaceData1> _allData = [];
+  PlaceData placeData = PlaceData();
+
+  _getData(){
+    for (var i = 0; i < placeData.placeName.length; i++) {
+      PlaceData1 d = PlaceData1(
+        placeData.image[i], 
+        placeData.placeName[i],
+        placeData.location[i], 
+        placeData.loves[i], 
+        placeData.views[i], 
+        placeData.comments[i], 
+        placeData.placeDeatails[i]
+        
+        );
+      _allData.add(d);
+    }
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    //double h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.grey[150],
       appBar: AppBar(
@@ -88,7 +115,7 @@ class _PlaceListPageState extends State<PlaceListPage> {
       ),
       body:  AnimationLimiter(
               child: ListView.builder(
-          itemCount: placeNameList.length,
+          itemCount: _allData.length,
           itemBuilder: (BuildContext context, int index) {
           return  AnimationConfiguration.staggeredList(
                 position: index,
@@ -130,26 +157,26 @@ class _PlaceListPageState extends State<PlaceListPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(placeNameList[index],style: textStyleBold,),
+                                    Text(_allData[index].name,style: textStyleBold,),
                                     
-                                    Text(locationList[index],style: TextStyle(fontSize: 12,color: Colors.grey[500],fontWeight: FontWeight.w600),),
+                                    Text(_allData[index].location,style: TextStyle(fontSize: 12,color: Colors.grey[500],fontWeight: FontWeight.w600),),
                                                             
                                     Divider(color: Colors.grey[400],height: 20,),
                                     
                                       
                                         
-                                         Row(
+                                        Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: <Widget>[
 
                                           Icon(LineIcons.heart,size: 18,color: Colors.orangeAccent,),
-                                          Text(' 20',style: textStylicon,),
+                                          Text(' ${_allData[index].loves}',style: textStylicon,),
                                           Spacer(),
                                           Icon(LineIcons.eye,size: 18,color: Colors.grey,),
-                                          Text(' 2000',style: textStylicon,),
+                                          Text(' ${_allData[index].views}',style: textStylicon,),
                                           Spacer(),
                                           Icon(LineIcons.comment_o,size: 18,color: Colors.grey,),
-                                          Text(' 24',style: textStylicon,),
+                                          Text(' ${_allData[index].comments}',style: textStylicon,),
                                           Spacer(),
 
 
@@ -198,14 +225,15 @@ class _PlaceListPageState extends State<PlaceListPage> {
                 print('hero$index');
                 Navigator.push(context, MaterialPageRoute(
                               builder: (context) => DetailsPage(
-                                  placeName: placeNameList[index],
-                                  placeLocation: locationList[index],
-                                  loves: loveList[index],
-                                  views: viewList[index],
-                                  comments: commentList[index],
-                                  picturesList: imageList,
-                                  placeDetails: placeDeatailsList[index],
+                                  placeName: _allData[index].name,
+                                    placeLocation: _allData[index].location,
+                                    loves: _allData[index].loves.toString(),
+                                    views: _allData[index].views.toString(),
+                                    comments: _allData[index].comments.toString(),
+                                    picturesList: imageList,
+                                    placeDetails: _allData[index].details,
                                   heroTag: 'hero$index',
+                                  placeIndex: index,
                               ) ));
               },
           ) 

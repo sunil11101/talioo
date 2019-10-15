@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CommentsPage extends StatefulWidget {
   CommentsPage({Key key}) : super(key: key);
@@ -11,22 +14,44 @@ class _CommentsPageState extends State<CommentsPage> {
   var formKey = GlobalKey<FormState>();
   var textFieldCtrl = TextEditingController();
   List userNames = [
-    'Rakib Bhuiyan',
-    'Tonmoy',
-    'Rakib Hasan',
-    'Tanvir Sohan',
-    'Moon Roy'
+    'Default User',
+    
   ];
 
-  List commentsList = [
-    'This is the most beautiful place i have ever seen in my whole life',
-    'Nice place',
-    'Nice place',
-    'This is the most beautiful place i have ever seen in my whole life, This is the most beautiful place i have ever seen in my whole life',
-    'Nice place',
+  List comments = ['Beautiful place'];
+  List images = [
+    'http://www.newdesignfile.com/postpic/2014/10/user-profile-icon-flat_248568.png'
   ];
+  String timeNow;
+  String name, picture;
 
-  List comments = ['nice'];
+   _getTime (){
+    DateTime now = DateTime.now();
+    String _date = DateFormat('dd-MM-yy  hh:mm a').format(now);
+    setState(() {
+      timeNow = _date;
+    });
+    print(timeNow);
+  }
+
+    Future _getUserDetailsfromSP() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var _name = sharedPreferences.getString('userName') ?? 'name';
+    
+    var _pic = sharedPreferences.getString('userProfilePic') ?? 'pic';
+    setState(() {
+      this.name = _name;
+      this.picture = _pic;
+    });
+    
+  }
+
+  @override
+  void initState() {
+    _getUserDetailsfromSP();
+    _getTime();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +62,7 @@ class _CommentsPageState extends State<CommentsPage> {
       height: h,
       child: Padding(
         padding:
-            const EdgeInsets.only(top: 25, left: 15, right: 15, bottom: 10),
+            const EdgeInsets.only(top: 25, left: 10, right: 10, bottom: 10),
         child: new Column(
           children: <Widget>[
             Container(
@@ -65,29 +90,52 @@ class _CommentsPageState extends State<CommentsPage> {
               child: ListView.builder(
                 itemCount: comments.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    elevation: 0.8,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    color: Colors.white,
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15, right: 10, bottom: 15),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.pinkAccent,
-                            child: Icon(LineIcons.user)),
-                        title: Text(
-                          userNames[index],
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          comments[index],
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
+                  return Container(
+                    padding: EdgeInsets.only(top: 15,left: 10,bottom: 10,right: 5),
+                    margin: EdgeInsets.only(top: 5,bottom: 5,right: 5,left: 5),
+                    decoration: BoxDecoration(
+                      //borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: <BoxShadow> [
+                        BoxShadow(
+                          color: Colors.grey[200],
+                          blurRadius: 2,
+                          offset: Offset(1, 1)
+                        )
+                      ]
+                    ),
+                    child: ListTile(
+                      leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            // border: Border.all(
+                            //   color: Colors.grey[700],
+                            //   width: 0.1
+                            // ),
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image:
+                                    CachedNetworkImageProvider(images[index]),
+                                fit: BoxFit.cover)),
+                      ),
+                      title: Text(
+                        userNames[index],
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Text(
+                        comments[index],
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      trailing: Column(
+                        children: <Widget>[
+                          Text(timeNow, style: TextStyle(
+                            fontSize: 11
+                          ),)
+                        ],
                       ),
                     ),
                   );
@@ -126,10 +174,6 @@ class _CommentsPageState extends State<CommentsPage> {
                         },
                       ),
                     ),
-                    
-
-                    //keyboardType: TextInputType.datetime,
-
                     validator: (value) {
                       if (value.length == 0)
                         return ("Comments can't be empty!");
@@ -139,6 +183,8 @@ class _CommentsPageState extends State<CommentsPage> {
                     onSaved: (String value) {
                       setState(() {
                         comments.add(value);
+                        images.add(picture);
+                        userNames.add(name);
                       });
                     }),
               ),
