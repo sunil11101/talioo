@@ -1,9 +1,9 @@
-import 'package:dots_indicator/dots_indicator.dart';
+
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -16,6 +16,7 @@ import 'package:travel_hour/pages/placelist.dart';
 import 'package:travel_hour/pages/search.dart';
 import 'package:travel_hour/widgets/featured_places.dart';
 import 'package:travel_hour/widgets/places_near_you.dart';
+import 'package:travel_hour/widgets/placesby_location.dart';
 import 'package:travel_hour/widgets/popular_places.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,16 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  List placesByLocation = [
-    'Dhaka',
-    'Chittagong',
-    'Sylhet',
-    'Rajshahi',
-    'Khulna',
-    'Barisal',
-    'Rangpur',
-    'Mymensingh'
-  ];
+
 
   PlaceData placeData = PlaceData();
   
@@ -43,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   String userProfilePic = '';
   int listIndex = 0;
+  
 
   Future _getUserDetailsfromSP() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -101,7 +94,9 @@ class _HomePageState extends State<HomePage> {
   Widget header(w) {
     return Padding(
         padding:
-            const EdgeInsets.only(top: 50, left: 20, right: 10, bottom: 20),
+            Platform.isAndroid ? 
+            const EdgeInsets.only(top: 50, left: 20, right: 10, bottom: 20)
+            : const EdgeInsets.only(top: 70, left: 20, right: 10, bottom: 20),
         child: SizedBox(
           height: 55,
           child: Row(
@@ -170,83 +165,8 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget placesBylocation(w) {
-    return Container(
-      height: 900,
-      child: ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: placesByLocation.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 15, right: 10),
-            child: Container(
-              alignment: Alignment.center,
-              height: 100,
-              width: w * 0.92,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        offset: Offset(5, 5),
-                        blurRadius: 1)
-                  ]),
-              child: ListTile(
-                leading: CircleAvatar(
-                    backgroundColor: Colors.blueAccent,
-                    child: Icon(
-                      LineIcons.location_arrow,
-                      size: 25,
-                      color: Colors.white,
-                    )),
-                title: Text(
-                  placesByLocation[index],
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                subtitle: Text(
-                  '5 Places',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    LineIcons.arrow_right,
-                    color: Colors.blueAccent,
-                  ),
-                  onPressed: () {},
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PlaceListPage(
-                                title: placesByLocation[index],
-                              )));
-                },
-              ),
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            height: 10,
-          );
-        },
-      ),
-    );
-  }
+  
 
-  DotsIndicator dots = DotsIndicator(
-      dotsCount: 5,
-      position: 2,
-      decorator: DotsDecorator(
-        size: const Size.square(8.0),
-        activeSize: const Size(16.0, 8.0),
-        activeShape:
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0)),
-      ),
-    );
 
 
   @override
@@ -257,24 +177,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         //backgroundColor: Colors.white,
         body: SingleChildScrollView(
-      child: AnimationLimiter(
-        child: Column(
-          children: AnimationConfiguration.toStaggeredList(
-            duration: const Duration(milliseconds: 400),
-            childAnimationBuilder: (widget) => SlideAnimation(
-              horizontalOffset: 50.0,
-              child: FadeInAnimation(
-                child: widget,
-              ),
-            ),
-            children: <Widget>[
+      child: Column(
+          children: <Widget>[
               header(w),
               searchBar(w),
               SizedBox(
                 height: 15,
               ),
               Featured(),
-              dots,
+              
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Container(
@@ -365,9 +276,9 @@ class _HomePageState extends State<HomePage> {
               ),
               placesBylocation(w),
             ],
-          ),
+          
         ),
-      ),
+      
     ));
   }
 }

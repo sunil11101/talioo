@@ -33,9 +33,9 @@ class _NavBarState extends State<NavBar> {
 
   BottomNavigationBar navbar() {
     return BottomNavigationBar(
-      iconSize: 30,
+      iconSize: 28,
       selectedItemColor: Colors.black,
-      selectedIconTheme: IconThemeData(color: Colors.black, size: 30),
+      selectedIconTheme: IconThemeData(color: Colors.black, size: 28),
       showSelectedLabels: true,
       showUnselectedLabels: true,
       unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
@@ -46,16 +46,16 @@ class _NavBarState extends State<NavBar> {
       items: [
         BottomNavigationBarItem(
           icon: Padding(
-            padding: const EdgeInsets.only(left: 60),
+            padding: const EdgeInsets.only(left: 20,top: 3),
             child: Icon(
               Icons.explore,
             ),
           ),
           title: Padding(
-            padding: const EdgeInsets.only(top: 3.0, left: 60),
+            padding: const EdgeInsets.only(top: 3.0, left: 20),
             child: Icon(
               FontAwesomeIcons.solidCircle,
-              size: 7.0,
+              size: 6.0,
               color: dotColor,
             ),
           ),
@@ -66,21 +66,21 @@ class _NavBarState extends State<NavBar> {
             padding: const EdgeInsets.only(top: 3.0),
             child: Icon(
               FontAwesomeIcons.solidCircle,
-              size: 7.0,
+              size: 6.0,
               color: dotColor2,
             ),
           ),
         ),
         BottomNavigationBarItem(
           icon: Padding(
-            padding: const EdgeInsets.only(right: 60),
+            padding: const EdgeInsets.only(right: 20),
             child: Icon(Icons.bookmark),
           ),
           title: Padding(
-            padding: const EdgeInsets.only(top: 3.0, right: 60),
+            padding: const EdgeInsets.only(top: 3.0, right: 20),
             child: Icon(
               FontAwesomeIcons.solidCircle,
-              size: 7.0,
+              size: 6.0,
               color: dotColor3,
             ),
           ),

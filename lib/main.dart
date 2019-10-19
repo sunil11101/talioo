@@ -1,5 +1,6 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_hour/pages/wellcome.dart';
 import 'package:travel_hour/widgets/navbar.dart';
@@ -8,8 +9,8 @@ void main() {
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //     //systemNavigationBarColor: Colors.blueAccent,
   //     //systemNavigationBarIconBrightness: Brightness.dark, // navigation bar color
-  //     //statusBarColor: Colors.transparent,
-  //     //statusBarIconBrightness: Brightness.dark // status bar color
+  //     statusBarColor: Colors.grey[300].withOpacity(0.3),
+  //     statusBarIconBrightness: Brightness.dark // status bar color
   //     ));
   runApp(MyApp());
 }
@@ -52,7 +53,7 @@ class _MyAppState extends State<MyApp> {
             iconTheme: IconThemeData(
               color: Colors.black,
             ),
-            brightness: Brightness.light,
+            //brightness: Brightness.light,
             textTheme: TextTheme(
                 title: TextStyle(
                     color: Colors.black,
@@ -62,7 +63,9 @@ class _MyAppState extends State<MyApp> {
                     )),
           )),
       debugShowCheckedModeBanner: false,
-      home: x == 0 ? WellComePage() : NavBar(),
+      home: 
+      //WellComePage()
+      x == 0 ? WellComePage() : NavBar(),
     );
   }
 }

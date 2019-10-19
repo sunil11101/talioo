@@ -21,7 +21,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
 
   PopupMenuButton _popupMenuButton = PopupMenuButton(
     child: Icon(LineIcons.sort, color: Colors.black),
-    initialValue: 'view',
+    //initialValue: 'view',
     itemBuilder: (BuildContext context) {
       return <PopupMenuItem>[
         PopupMenuItem(
@@ -103,14 +103,14 @@ class _ArticlesPageState extends State<ArticlesPage> {
     //double h = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          //backgroundColor: Colors.transparent,
           centerTitle: false,
           automaticallyImplyLeading: false,
           title: Text(
             'Travel Hour Blog',
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          //elevation: 0.5,
+          elevation: 0.5,
           actions: <Widget>[
             _popupMenuButton,
             SizedBox(
@@ -212,7 +212,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                           ),
                                           onPressed: () {},
                                           label: Text(
-                                            _allData[index].loves,
+                                            _allData[index].loves.toString(),
                                             style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 15),

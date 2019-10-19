@@ -31,7 +31,8 @@ class _OtherPlacesState extends State<OtherPlaces> {
         placeData.loves[i], 
         placeData.views[i], 
         placeData.comments[i], 
-        placeData.placeDeatails[i]
+        placeData.placeDeatails[i],
+        placeData.imageList[i]
         
         );
       _allData.add(d);
@@ -149,10 +150,10 @@ class _OtherPlacesState extends State<OtherPlaces> {
                                 builder: (context) => DetailsPage(
                                     placeName: _allData[index].name,
                                     placeLocation: _allData[index].location,
-                                    loves: _allData[index].loves.toString(),
-                                    views: _allData[index].views.toString(),
-                                    comments: _allData[index].comments.toString(),
-                                    picturesList: imageList,
+                                    loves: _allData[index].loves,
+                                    views: _allData[index].views,
+                                    comments: _allData[index].comments,
+                                    picturesList: _allData[index].imageList,
                                     placeDetails: _allData[index].details,
                                       heroTag: 'heroOtherPlaces$index',
                                       placeIndex: index,

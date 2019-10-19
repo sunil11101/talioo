@@ -5,8 +5,8 @@ class BlogData1 {
   String details;
   String source;
   String picture;
-  String views;
-  String loves;
+  int views;
+  int loves;
 
   BlogData1(this.title,this.details,this.source,this.picture,this.views,this.loves);
   
@@ -46,8 +46,8 @@ class BlogData {
     'https://assetsds.cdnedge.bluemix.net/sites/default/files/styles/big_2/public/feature/images/physically-challenged-afp-wb.jpg?itok=nUwbRjkc'
   ];
 
-  List blogLoves = ['2000', '600', '300', '200', '120'];
+  List blogLoves = [2000, 600, 300, 200, 120];
 
-  List blogViews = ['1000', '2000', '3000', '6000', '200000'];
+  List blogViews = [1000, 2000, 3000, 6000, 200000];
 
 }

@@ -16,21 +16,23 @@ class MyData {
 }
 
 class DetailsPage extends StatefulWidget {
-  final String placeName, placeLocation, loves, views, comments, placeDetails,heroTag;
+  final String placeName, placeLocation,placeDetails,heroTag;
   final List picturesList;
-  final int placeIndex;
+  final int loves, views, comments, placeIndex;
+  
 
   DetailsPage(
       {Key key,
       @required 
       this.placeName,
       this.placeLocation,
-      this.loves,
-      this.views,
-      this.comments,
+      
       this.placeDetails,
       this.heroTag,
       this.picturesList,
+      this.loves,
+      this.views,
+      this.comments,
       this.placeIndex
       })
       : super(key: key);
@@ -39,28 +41,30 @@ class DetailsPage extends StatefulWidget {
   
       this.placeName,
       this.placeLocation,
-      this.loves,
-      this.views,
-      this.comments,
+      
       this.placeDetails,
       this.heroTag,
       this.picturesList,
+      this.loves,
+      this.views,
+      this.comments,
       this.placeIndex
       );
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  String placeName, placeLocation, loves, views, comments, placeDetails,heroTag;
+  String placeName, placeLocation,  placeDetails,heroTag;
   List picturesList;
-  int placeIndex;
+  int loves, views, comments,placeIndex;
   _DetailsPageState(this.placeName,
       this.placeLocation,
-      this.loves,
-      this.views,
-      this.comments,
+      
       this.placeDetails,
       this.heroTag,
       this.picturesList,
+      this.loves,
+      this.views,
+      this.comments,
       this.placeIndex
       );
 

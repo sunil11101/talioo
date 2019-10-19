@@ -26,7 +26,9 @@ class _PopularPlacesState extends State<PopularPlaces> {
         placeData.loves[i], 
         placeData.views[i], 
         placeData.comments[i], 
-        placeData.placeDeatails[i]
+        placeData.placeDeatails[i],
+        placeData.imageList[i],
+        
         
         );
       _allData.add(d);
@@ -113,7 +115,7 @@ class _PopularPlacesState extends State<PopularPlaces> {
                                 size: 20,
                               ),
                               label: Text(
-                                _allData[index].loves,
+                                _allData[index].loves.toString(),
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 13),
                               ),
@@ -151,10 +153,10 @@ class _PopularPlacesState extends State<PopularPlaces> {
                                 builder: (context) => DetailsPage(
                                     placeName: _allData[index].name,
                                     placeLocation: _allData[index].location,
-                                    loves: _allData[index].loves.toString(),
-                                    views: _allData[index].views.toString(),
-                                    comments: _allData[index].comments.toString(),
-                                    picturesList: imageList,
+                                    loves: _allData[index].loves,
+                                    views: _allData[index].views,
+                                    comments: _allData[index].comments,
+                                    picturesList: _allData[index].imageList,
                                     placeDetails: _allData[index].details,
                                       heroTag: 'heroPopular$index',
                                       placeIndex: index,

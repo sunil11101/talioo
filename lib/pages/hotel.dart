@@ -116,7 +116,7 @@ class _HotelPageState extends State<HotelPage> {
                   width: 60,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 0, right: 0),
+                  padding: const EdgeInsets.only(left: 15, top: 0, right: 0),
                   child: Container(
                     width: 183,
                     child: Column(
@@ -184,7 +184,7 @@ class _HotelPageState extends State<HotelPage> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(left: 10, top: 10, right: 5),
+                    padding: EdgeInsets.only(left: 15, top: 10, right: 5),
                     height: 200,
                     width: MediaQuery.of(context).size.width,
                     color: Colors.orangeAccent,
@@ -335,7 +335,7 @@ class _HotelPageState extends State<HotelPage> {
           ),
         ),
         Positioned(
-            top: 32,
+            top: 40,
             left: 15,
             child: Row(
               children: <Widget>[

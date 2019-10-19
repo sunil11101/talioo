@@ -9,9 +9,9 @@ class ArticlesDetailsPage extends StatefulWidget {
       blogSubtitle,
       blogSource,
       blogImage,
-      blogLoves,
+      
       heroTag;
-  final int blogIndex;
+  final int blogLoves,blogIndex;
 
   ArticlesDetailsPage(
       {Key key,
@@ -35,8 +35,8 @@ class ArticlesDetailsPage extends StatefulWidget {
 }
 
 class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
-  String blogTitle, blogSubtitle, blogSource, blogImage, blogLoves, heroTag;
-  int blogIndex;
+  String blogTitle, blogSubtitle, blogSource, blogImage, heroTag;
+  int blogLoves, blogIndex;
   _ArticlesDetailsPageState(this.blogTitle, this.blogImage, this.blogLoves,
       this.blogSource, this.blogSubtitle, this.heroTag, this.blogIndex);
 

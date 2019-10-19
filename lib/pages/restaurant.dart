@@ -13,7 +13,6 @@ class RestaurantPage extends StatefulWidget {
 }
 
 class _RestaurantPageState extends State<RestaurantPage> {
-
   GoogleMapController _controller;
   List<Restaurant> _allData = [];
   PageController _pageController;
@@ -359,7 +358,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
           ),
         ),
         Positioned(
-            top: 32,
+            top: 40,
             left: 15,
             child: Row(
               children: <Widget>[

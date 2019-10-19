@@ -53,7 +53,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
         placeData.loves[i], 
         placeData.views[i], 
         placeData.comments[i], 
-        placeData.placeDeatails[i]
+        placeData.placeDeatails[i],
+        placeData.imageList[i]
         
         );
       _allData.add(d);
@@ -397,9 +398,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                 builder: (context) => DetailsPage(
                                       placeName: _allData[placeListInt[index]].name,
                                       placeLocation: _allData[placeListInt[index]].location,
-                                      loves: _allData[placeListInt[index]].loves.toString(),
-                                      views: _allData[placeListInt[index]].views.toString(),
-                                      comments: _allData[placeListInt[index]].comments.toString(),
+                                      loves: _allData[placeListInt[index]].loves,
+                                      views: _allData[placeListInt[index]].views,
+                                      comments: _allData[placeListInt[index]].comments,
                                       picturesList: imageList,
                                       placeDetails: _allData[placeListInt[index]].details,
                                       heroTag: 'heroPlaceBookmark$index',

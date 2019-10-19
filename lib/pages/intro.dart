@@ -170,7 +170,7 @@ class _IntroPageState extends State<IntroPage> {
             ),
             
             Text(
-              'No matter where you are',
+              'Explore Nearby Stuffs',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             SizedBox(
@@ -179,7 +179,7 @@ class _IntroPageState extends State<IntroPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
-                'Access to importent infoemation about your destination before and during your travel',
+                'Explore nearby hotels & retaurants near every tourist spots',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),
@@ -212,7 +212,7 @@ class _IntroPageState extends State<IntroPage> {
             ),
             
             Text(
-              'No matter where you are',
+              'Travel Guide',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             SizedBox(
@@ -221,7 +221,7 @@ class _IntroPageState extends State<IntroPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Text(
-                'Access to importent infoemation about your destination before and during your travel',
+                'Get directions, costs and other stuffs in one place',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey[500]),
               ),

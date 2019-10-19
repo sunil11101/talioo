@@ -30,7 +30,10 @@ class _SearchPageState extends State<SearchPage> {
           placeData.loves[i],
           placeData.views[i],
           placeData.comments[i],
-          placeData.placeDeatails[i]);
+          placeData.placeDeatails[i],
+          placeData.imageList[i]
+          
+          );
       _allData.add(d);
     }
   }
@@ -61,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
               children: <Widget>[
                 Container(
                   child: CachedNetworkImage(
-                    imageUrl: imageList[index],
+                    imageUrl: _allData[index].image,
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -159,10 +162,10 @@ class _SearchPageState extends State<SearchPage> {
                     builder: (context) => DetailsPage(
                           placeName: _allData[index].name,
                           placeLocation: _allData[index].location,
-                          loves: _allData[index].loves.toString(),
-                          views: _allData[index].views.toString(),
-                          comments: _allData[index].comments.toString(),
-                          picturesList: imageList,
+                          loves: _allData[index].loves,
+                          views: _allData[index].views,
+                          comments: _allData[index].comments,
+                          picturesList: _allData[index].imageList,
                           placeDetails: _allData[index].details,
                           heroTag: 'heroExplore$index',
                           placeIndex: index,
@@ -289,10 +292,10 @@ class _SearchPageState extends State<SearchPage> {
                     builder: (context) => DetailsPage(
                           placeName: _filteredData[index].name,
                           placeLocation: _filteredData[index].location,
-                          loves: _filteredData[index].loves.toString(),
-                          views: _filteredData[index].views.toString(),
-                          comments: _filteredData[index].comments.toString(),
-                          picturesList: imageList,
+                          loves: _filteredData[index].loves,
+                          views: _filteredData[index].views,
+                          comments: _filteredData[index].comments,
+                          picturesList: _allData[index].imageList,
                           placeDetails: _filteredData[index].details,
                           heroTag: 'heroExplore$index',
                           placeIndex: index,

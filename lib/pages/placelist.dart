@@ -46,7 +46,7 @@ class _PlaceListPageState extends State<PlaceListPage> {
 
     Widget cachedImage(index) {
     return CachedNetworkImage(
-      imageUrl: imageList[index],
+      imageUrl: _allData[index].image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -82,7 +82,8 @@ class _PlaceListPageState extends State<PlaceListPage> {
         placeData.loves[i], 
         placeData.views[i], 
         placeData.comments[i], 
-        placeData.placeDeatails[i]
+        placeData.placeDeatails[i],
+        placeData.imageList[i]
         
         );
       _allData.add(d);
@@ -107,10 +108,10 @@ class _PlaceListPageState extends State<PlaceListPage> {
         centerTitle: false,
         
         elevation: 0,
-        actionsIconTheme: IconThemeData(color: Colors.black,),
+        
         
         actions: <Widget>[
-          IconButton(icon: Icon(LineIcons.bell_o), onPressed: () {},)
+          IconButton(icon: Icon(LineIcons.sort), onPressed: () {},)
         ],
       ),
       body:  AnimationLimiter(
@@ -227,10 +228,10 @@ class _PlaceListPageState extends State<PlaceListPage> {
                               builder: (context) => DetailsPage(
                                   placeName: _allData[index].name,
                                     placeLocation: _allData[index].location,
-                                    loves: _allData[index].loves.toString(),
-                                    views: _allData[index].views.toString(),
-                                    comments: _allData[index].comments.toString(),
-                                    picturesList: imageList,
+                                    loves: _allData[index].loves,
+                                    views: _allData[index].views,
+                                    comments: _allData[index].comments,
+                                    picturesList: _allData[index].imageList,
                                     placeDetails: _allData[index].details,
                                   heroTag: 'hero$index',
                                   placeIndex: index,

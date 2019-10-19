@@ -138,13 +138,17 @@ class _GuidePageState extends State<GuidePage> {
       width: w,
       child: GoogleMap(
         initialCameraPosition: CameraPosition(
-            target: _mapDetails.center, zoom: 10, tilt: 45, bearing: 45),
+            target: _mapDetails.center, zoom: 10, 
+            tilt: 45, 
+            bearing: 45),
         mapType: MapType.normal,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
         markers: Set.from(_markers),
         polylines: Set.from(_polylines),
+        compassEnabled: false,
+        myLocationEnabled: false,
       ),
     );
   }
@@ -156,22 +160,25 @@ class _GuidePageState extends State<GuidePage> {
     return new Scaffold(
         body: Stack(children: <Widget>[
       SlidingUpPanel(
-          parallaxEnabled: true,
-          parallaxOffset: 0.5,
-          backdropEnabled: true,
-          backdropOpacity: 0.2,
+           //parallaxEnabled: true,
+          // parallaxOffset: 0.5,
+           backdropEnabled: true,
+           backdropOpacity: 0.2,
+           backdropTapClosesPanel: true,
+           isDraggable: true,
+           
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           boxShadow: <BoxShadow>[
             BoxShadow(
                 color: Colors.grey[400], blurRadius: 4, offset: Offset(1, 0))
           ],
-          isDraggable: true,
+          
           padding: EdgeInsets.only(top: 15, left: 10, bottom: 0, right: 10),
           panel: panelUI(),
           body: panelBodyUI(h, w)),
       Positioned(
-        top: 30,
+        top: 35,
         left: 10,
         child: Container(
           height: 65,

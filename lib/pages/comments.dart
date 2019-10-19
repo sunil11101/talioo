@@ -91,7 +91,7 @@ class _CommentsPageState extends State<CommentsPage> {
                 itemCount: comments.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    padding: EdgeInsets.only(top: 15,left: 10,bottom: 10,right: 5),
+                    padding: EdgeInsets.only(top: 15,left: 5,bottom: 10,right: 10),
                     margin: EdgeInsets.only(top: 5,bottom: 5,right: 5,left: 5),
                     decoration: BoxDecoration(
                       //borderRadius: BorderRadius.circular(10),
@@ -104,8 +104,18 @@ class _CommentsPageState extends State<CommentsPage> {
                         )
                       ]
                     ),
-                    child: ListTile(
-                      leading: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.topRight,
+                          height: 11,
+                          child: Text(timeNow, style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500
+                          ),),
+                        ),
+                        ListTile(
+                          leading: Container(
                         height: 50,
                         width: 50,
                         decoration: BoxDecoration(
@@ -123,21 +133,52 @@ class _CommentsPageState extends State<CommentsPage> {
                       title: Text(
                         userNames[index],
                         style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w600),
+                            fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text(
                         comments[index],
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 13, fontWeight: FontWeight.w500),
                       ),
-                      trailing: Column(
-                        children: <Widget>[
-                          Text(timeNow, style: TextStyle(
-                            fontSize: 11
-                          ),)
-                        ],
-                      ),
-                    ),
+                        )
+                      ],
+                    )
+                    
+                    
+                    // ListTile(
+                    //   leading: Container(
+                    //     height: 50,
+                    //     width: 50,
+                    //     decoration: BoxDecoration(
+                    //         // border: Border.all(
+                    //         //   color: Colors.grey[700],
+                    //         //   width: 0.1
+                    //         // ),
+                    //         color: Colors.grey[300],
+                    //         shape: BoxShape.circle,
+                    //         image: DecorationImage(
+                    //             image:
+                    //                 CachedNetworkImageProvider(images[index]),
+                    //             fit: BoxFit.cover)),
+                    //   ),
+                    //   title: Text(
+                    //     userNames[index],
+                    //     style: TextStyle(
+                    //         fontSize: 12, fontWeight: FontWeight.w600),
+                    //   ),
+                    //   subtitle: Text(
+                    //     comments[index],
+                    //     style: TextStyle(
+                    //         fontSize: 16, fontWeight: FontWeight.w500),
+                    //   ),
+                    //   trailing: Column(
+                    //     children: <Widget>[
+                    //       Text(timeNow, style: TextStyle(
+                    //         fontSize: 11
+                    //       ),)
+                    //     ],
+                    //   ),
+                    // ),
                   );
                 },
               ),
