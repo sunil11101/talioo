@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "674264708413-p35i0plhmkue6d904hjq8596fr7rlu35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrblab.travel_hour",
+            "certificate_hash": "c34020430dc40eb21ada479e32b4d8567d59f6ac"
+          }
+        },
+        {
+          "client_id": "674264708413-v3idufdum1uat1pg68fkgmjd21ptrjif.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrblab.travel_hour",
+            "certificate_hash": "7c9ad081705837fd97c7090a05893477099951ca"
+          }
+        },
+        {
           "client_id": "674264708413-c33uverghv2thism19fc2umo23kgr47i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -40,10 +56,10 @@
               "client_type": 3
             },
             {
-              "client_id": "674264708413-mu0o4jah8e3107kfvkgu6elcj8m5tgeb.apps.googleusercontent.com",
+              "client_id": "674264708413-gr90kclpb3f27s8nsb01g77m8i39ue7s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "mrblab.travel-hour"
+                "bundle_id": "com.mrblab.travelhour"
               }
             }
           ]

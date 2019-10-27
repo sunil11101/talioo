@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
 
-import 'package:travel_hour/models/places_data.dart';
+
 import 'package:travel_hour/pages/details.dart';
-import 'package:travel_hour/variables.dart';
+import 'package:travel_hour/models/variables.dart';
 
 class Featured extends StatefulWidget {
   Featured({Key key}) : super(key: key);
@@ -14,48 +16,13 @@ class Featured extends StatefulWidget {
 }
 
 class _FeaturedState extends State<Featured> {
-
-  ScrollController _controller = ScrollController();
-  PlaceData placeData = PlaceData();
-  List<PlaceData1> _allData = [];
-  static int listIndex = 1;
   
-    _getData(){
-    for (var i = 0; i < placeData.placeName.length; i++) {
-      PlaceData1 d = PlaceData1(
-        placeData.image[i], 
-        placeData.placeName[i],
-        placeData.location[i], 
-        placeData.loves[i], 
-        placeData.views[i], 
-        placeData.comments[i], 
-        placeData.placeDeatails[i],
-        placeData.imageList[i]
-        
-        );
-      _allData.add(d);
-      _allData.sort((a,b) => a.loves.compareTo(b.loves));
-      
-      
-    }
-  }
+  
+  int listIndex = 2;
 
-    DotsIndicator dots = DotsIndicator(
-      
-      dotsCount: 5,
-      position: listIndex,
-      decorator: DotsDecorator(
-        size: const Size.square(8.0),
-        activeSize: const Size(16.0, 8.0),
-        activeShape:
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0)),
-      ),
-    );
-
-  Widget cachedImage(index) {
+  Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
-      imageUrl: _allData[index].image,
+      imageUrl: placesBloc.allData[index].image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -80,26 +47,17 @@ class _FeaturedState extends State<Featured> {
   }
 
 
-  
 
-  @override
-  void initState() {
-    _controller.addListener(_knowPosition);
-    _getData();
-    super.initState();
-  }
 
-  _knowPosition(){
-    
-    setState(() {
-      listIndex = (_controller.offset/160).round();
-    });
-    print(listIndex);
-  }
-
+ 
 
   @override
   Widget build(BuildContext context) {
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
+    
+    
+    
+    
     double w = MediaQuery.of(context).size.width;
     //double h = MediaQuery.of(context).size.height;
     return Column(
@@ -107,147 +65,168 @@ class _FeaturedState extends State<Featured> {
         Container(
           height: 305,
           width: w,
-          child: ListView.builder(
-            controller: _controller,
+          child: PageView.builder(
+            controller: PageController(
+              initialPage: 2
+            ),
             scrollDirection: Axis.horizontal,
-            itemCount: _allData.length,
+            itemCount: placesBloc.allData.length,
+
+            //pageSnapping: false,
+
+            onPageChanged: (index) {
+              setState(() {
+                listIndex = index;
+                print(listIndex);
+              });
+            },
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: SizedBox(
-                      height: 300,
-                      width: w * 0.80,
-                      child: InkWell(
-                        child: Stack(
-                          children: <Widget>[
-                            Hero(
-                              tag: 'heroFeatured$index',
-                                child: Container(
-                                height: 250,
-                                width: w * 0.80,
-
-                                child: cachedImage(index),
-
-                               
-                              ),
-                            ),
-                            Positioned(
-                              height: 120,
-                              width: w * 0.70,
-                              left: 20,
-                              bottom: 15,
-                              child: Container(
-                                //margin: EdgeInsets.all(0),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          offset: Offset(0, 2),
-                                          blurRadius: 2)
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: SizedBox(
+                  height: 300,
+                  width: w,
+                  child: InkWell(
+                    child: Stack(
+                      children: <Widget>[
+                        Hero(
+                          tag: 'heroFeatured$index',
+                          child: Container(
+                            height: 250,
+                            width: w,
+                            child: cachedImage(index, placesBloc),
+                          ),
+                        ),
+                        Positioned(
+                          height: 120,
+                          width: w * 0.70,
+                          left: w * 0.11,
+                          bottom: 15,
+                          child: Container(
+                            //margin: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      offset: Offset(0, 2),
+                                      blurRadius: 2)
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    placesBloc.allData[index].name,
+                                    style: textStyleBold,
+                                  ),
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(
-                                        _allData[index].name,
-                                        style: textStyleBold,
+                                      Icon(
+                                        Icons.location_on,
+                                        size: 14,
+                                        color: Colors.grey,
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.location_on,
-                                            size: 14,
-                                            color: Colors.grey,
-                                          ),
-                                          Text(_allData[index].location,style: TextStyle(
-                                            fontSize: 12,fontWeight: FontWeight.w500,color: Colors.grey[500]))
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[300],
-                                        height: 20,
-                                      ),
-                                      Expanded(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Icon(
-                                              LineIcons.heart,
-                                              size: 18,
-                                              color: Colors.orange,
-                                            ),
-                                            Text(
-                                              _allData[index].loves.toString(),
-                                              style: textStylicon,
-                                            ),
-                                            Spacer(),
-                                            Icon(
-                                              LineIcons.eye,
-                                              size: 18,
-                                              color: Colors.orange,
-                                            ),
-                                            Text(
-                                              _allData[index].views.toString(),
-                                              style: textStylicon,
-                                            ),
-                                            Spacer(),
-                                            Icon(
-                                              LineIcons.comment_o,
-                                              size: 18,
-                                              color: Colors.orange,
-                                            ),
-                                            Text(
-                                              _allData[index].comments.toString(),
-                                              style: textStylicon,
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
-                                      )
+                                      Text(placesBloc.allData[index].location,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey[500]))
                                     ],
                                   ),
-                                ),
+                                  Divider(
+                                    color: Colors.grey[300],
+                                    height: 20,
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(
+                                          LineIcons.heart,
+                                          size: 18,
+                                          color: Colors.orange,
+                                        ),
+                                        Text(
+                                          placesBloc.allData[index].loves.toString(),
+                                          style: textStylicon,
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          LineIcons.eye,
+                                          size: 18,
+                                          color: Colors.orange,
+                                        ),
+                                        Text(
+                                          placesBloc.allData[index].views.toString(),
+                                          style: textStylicon,
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          LineIcons.comment_o,
+                                          size: 18,
+                                          color: Colors.orange,
+                                        ),
+                                        Text(
+                                          placesBloc.allData[index].comments.toString(),
+                                          style: textStylicon,
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            
-                          ],
+                          ),
                         ),
-                        onTap: () {
-                          setState(() {
-                            listIndex = index;
-                          });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                
-                                  builder: (context) => DetailsPage(
-                                        placeName: _allData[index].name,
-                                        placeLocation: _allData[index].location,
-                                        loves: _allData[index].loves,
-                                        views: _allData[index].views,
-                                        comments: _allData[index].comments,
-                                        picturesList: _allData[index].imageList,
-                                        placeDetails: _allData[index].details,
-                                        heroTag: 'heroFeatured$index',
-                                        placeIndex: index,
-                                      )));
-                        },
-                      ),
+                      ],
                     ),
-                  
-                
+                    onTap: () {
+                      setState(() {
+                        listIndex = index;
+                      });
+                      placesBloc.viewsIncrement(index);
+                      placesBloc.loveIconCheck(placesBloc.allData[index].name);
+                      placesBloc.bookmarkIconCheck(placesBloc.allData[index].name);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailsPage(
+                                    placeName: placesBloc.allData[index].name,
+                                    placeLocation: placesBloc.allData[index].location,
+                                    loves: placesBloc.allData[index].loves,
+                                    views: placesBloc.allData[index].views,
+                                    comments: placesBloc.allData[index].comments,
+                                    picturesList: placesBloc.allData[index].imageList,
+                                    placeDetails: placesBloc.allData[index].details,
+                                    heroTag: 'heroFeatured$index',
+                                    placeIndex: index,
+                                  )));
+                    },
+                  ),
+                ),
               );
             },
           ),
         ),
-        dots
+        DotsIndicator(
+          dotsCount: 5,
+          position: listIndex,
+          decorator: DotsDecorator(
+            size: const Size.square(8.0),
+            activeSize: const Size(16.0, 8.0),
+            activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+          ),
+        )
       ],
     );
   }

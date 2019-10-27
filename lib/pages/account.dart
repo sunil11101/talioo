@@ -204,28 +204,32 @@ class _AccountPageState extends State<AccountPage> {
             height: 30,
           ),
           InkWell(
-            child: Container(
-              height: 100,
-              width: 100,
-              
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey[800]
-                  ),
-                  
-                  color: Colors.grey[500],
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: CachedNetworkImageProvider(pic),
-                      fit: BoxFit.cover)),
-              child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Icon(
-                    Icons.edit,
-                    size: 30,
-                    color: Colors.black,
-                  )),
+            child: CircleAvatar(
+              radius: 60,
+              backgroundColor: Colors.grey[300],
+                child: Container(
+                height: 100,
+                width: 100,
+                
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey[800]
+                    ),
+                    
+                    color: Colors.grey[500],
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: CachedNetworkImageProvider(pic),
+                        fit: BoxFit.cover)),
+                child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Icon(
+                      Icons.edit,
+                      size: 30,
+                      color: Colors.black,
+                    )),
+              ),
             ),
             onTap: () {
               _uploadPicture();
@@ -404,7 +408,7 @@ class _AccountPageState extends State<AccountPage> {
             height: 10,
           ),
           Text(
-            userName,
+            name,
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w600, fontSize: 18),
           ),

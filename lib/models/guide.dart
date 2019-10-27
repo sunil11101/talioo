@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -6,22 +7,25 @@ class GuideDetails {
   String cost = '500TK/Person';
   List iconList = [
     LineIcons.car,
-    LineIcons.rub,
+    FontAwesomeIcons.walking,
     LineIcons.bus,
-    Icons.directions_boat
+    Icons.directions_boat,
+    FontAwesomeIcons.hiking
   ];
   List colorList = [
     Colors.blueAccent,
     Colors.orangeAccent,
     Colors.pinkAccent,
-    Colors.greenAccent
+    Colors.deepPurpleAccent,
+    Colors.redAccent
   ];
 
   List<String> routeTitle = [
     'Kodomtuli to Bondor',
     'Bondor to Amborkhana Point',
     'Amborkhana Point to Gowainghat',
-    'Gowainghat to Bichnakandi Point'
+    'Gowainghat to Bichnakandi',
+    'Bichnakandi to Tourist Spot'
   ];
 
   List<String> routeSubtitle = [
@@ -29,6 +33,7 @@ class GuideDetails {
     'By Walking',
     'By CNG',
     'By Boat',
+    'By Hiking'
   ];
 
   List<String> routePrice = [
@@ -36,6 +41,7 @@ class GuideDetails {
     '0',
     '120tk/person',
     '200tk/person',
+    '0'
   ];
 }
 

@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget searchBar(w) {
     return Padding(
-      padding: const EdgeInsets.only(top: 0, left: 15, right: 10, bottom: 5),
+      padding: const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 5),
       child: InkWell(
         child: Container(
           alignment: Alignment.centerLeft,
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     return Padding(
         padding:
             Platform.isAndroid ? 
-            const EdgeInsets.only(top: 50, left: 20, right: 10, bottom: 20)
+            const EdgeInsets.only(top: 50, left: 20, right: 15, bottom: 18)
             : const EdgeInsets.only(top: 70, left: 20, right: 10, bottom: 20),
         child: SizedBox(
           height: 55,
@@ -108,14 +108,14 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'Travel Hour',
                     style: TextStyle(
-                        fontSize: 23,
+                        fontSize: 21,
                         fontWeight: FontWeight.w700,
                         color: Colors.black),
                   ),
                   Text(
                     ' Explore Bangladesh',
                     style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500,
                         color: Colors.grey[600]),
                   )
@@ -182,12 +182,12 @@ class _HomePageState extends State<HomePage> {
               header(w),
               searchBar(w),
               SizedBox(
-                height: 15,
+                height: 10,
               ),
               Featured(),
               
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.only(left: 15, top: 10, bottom: 15,right: 15),
                 child: Container(
                   height: 30,
                   width: w,
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           'View All >',
                           style:
-                              TextStyle(fontSize: 13, color: Colors.grey[500]),
+                              TextStyle(fontSize: 13, color: Colors.grey),
                         ),
                         onTap: () {
                           Navigator.push(
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                       InkWell(
                         child: Text(
                           'View All >',
-                          style: TextStyle(fontSize: 13),
+                          style: TextStyle(fontSize: 13, color: Colors.grey),
                         ),
                         onTap: () {
                           Navigator.push(

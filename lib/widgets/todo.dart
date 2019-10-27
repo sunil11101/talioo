@@ -30,7 +30,9 @@ class TodoWidgets extends StatelessWidget {
             height: 0,
           ),
           Container(
-            height: 320,
+            
+            //color: Colors.brown,
+            height: 330,
             //width: w,
             child: GridView.count(
               mainAxisSpacing: 10,
@@ -43,6 +45,7 @@ class TodoWidgets extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       Container(
+                        
                         decoration: BoxDecoration(
                             color: Colors.blueAccent,
                             borderRadius: BorderRadius.circular(10),

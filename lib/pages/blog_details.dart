@@ -1,190 +1,51 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
-class ArticlesDetailsPage extends StatefulWidget {
+import 'package:travel_hour/blocs/blog_bloc.dart';
+
+
+
+class ArticlesDetailsPage extends StatelessWidget {
   final String blogTitle,
       blogSubtitle,
       blogSource,
       blogImage,
-      
       heroTag;
-  final int blogLoves,blogIndex;
+
+  final int blogLoves, blogViews, blogIndex, blogListIndex;
 
   ArticlesDetailsPage(
       {Key key,
       @required this.blogTitle,
       this.blogImage,
       this.blogLoves,
+      this.blogViews,
       this.blogSource,
       this.blogSubtitle,
       this.heroTag,
-      this.blogIndex})
+      this.blogIndex,
+      this.blogListIndex
+      })
       : super(key: key);
 
-  _ArticlesDetailsPageState createState() => _ArticlesDetailsPageState(
-      this.blogTitle,
-      this.blogImage,
-      this.blogLoves,
-      this.blogSource,
-      this.blogSubtitle,
-      this.heroTag,
-      this.blogIndex);
-}
+  
 
-class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
-  String blogTitle, blogSubtitle, blogSource, blogImage, heroTag;
-  int blogLoves, blogIndex;
-  _ArticlesDetailsPageState(this.blogTitle, this.blogImage, this.blogLoves,
-      this.blogSource, this.blogSubtitle, this.heroTag, this.blogIndex);
 
-  Icon loveIcon = Icon(
-    Icons.favorite_border,
-    color: Colors.grey,
-  );
-  Icon loveIconNormal = Icon(
-    Icons.favorite_border,
-    color: Colors.grey,
-  );
-  Icon loveIconBold = Icon(
-    Icons.favorite,
-    color: Colors.pinkAccent,
-  );
-  int loveAmount;
-  int viewsAmount;
-
-  Icon bookmarkIcon = Icon(
-    Icons.bookmark_border,
-    color: Colors.grey,
-  );
-  Icon bookmarkIconNormal = Icon(
-    Icons.bookmark_border,
-    color: Colors.grey,
-  );
-  Icon bookmarkIconBold = Icon(
-    Icons.bookmark,
-    color: Colors.grey[700],
-  );
-
-  List<String> blogList = [];
-
-  _viewsCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    int views = sp.getInt('$blogTitle/views') ?? 10000;
-    int _viewsAmount = (views + (1));
-    sp.setInt('$blogTitle/views', _viewsAmount);
-    setState(() {
-      viewsAmount = _viewsAmount;
-    });
-  }
-
-  _loveIconCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-    bool checked = sp.getBool('$uid/$blogTitle/love') ?? false;
-    int _loveAmount = sp.getInt('$uid/$blogTitle/loveAmount') ?? 10;
-    if (checked == false) {
-      setState(() {
-        loveIcon = loveIconNormal;
-        loveAmount = _loveAmount;
-      });
-    } else {
-      setState(() {
-        loveIcon = loveIconBold;
-        loveAmount = _loveAmount;
-      });
-    }
-  }
-
-  _loveIconClicked() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool clicked = sp.getBool('$uid/$blogTitle/love') ?? false;
-    int _loveAmount = sp.getInt('$uid/$blogTitle/loveAmount') ?? 10;
-    if (clicked == false) {
-      sp.setBool('$uid/$blogTitle/love', true);
-      int count = (_loveAmount + (1));
-      setState(() {
-        loveIcon = loveIconBold;
-        sp.setInt('$uid/$blogTitle/loveAmount', count);
-        loveAmount = count;
-      });
-    } else {
-      sp.setBool('$uid/$blogTitle/love', false);
-      int count = (_loveAmount - (1));
-      setState(() {
-        loveIcon = loveIconNormal;
-        sp.setInt('$uid/$blogTitle/loveAmount', count);
-        loveAmount = count;
-      });
-    }
-  }
-
-  _bookmarkIconCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool checked = sp.getBool('$uid/$blogTitle/bookmark') ?? false;
-    List<String> _blogList = sp.getStringList('blogList') ?? [];
-    setState(() {
-      blogList = _blogList;
-      print(blogList);
-    });
-
-    if (checked == false) {
-      setState(() {
-        bookmarkIcon = bookmarkIconNormal;
-      });
-    } else {
-      setState(() {
-        bookmarkIcon = bookmarkIconBold;
-      });
-    }
-  }
-
-  _bookmarkIconClicked(index) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool clicked = sp.getBool('$uid/$blogTitle/bookmark') ?? false;
-
-    if (clicked == false) {
-      sp.setBool('$uid/$blogTitle/bookmark', true);
-      Toast.show('Added to your bookmark list', context,
-          duration: Toast.LENGTH_LONG, backgroundColor: Colors.grey[800]);
-      setState(() {
-        bookmarkIcon = bookmarkIconBold;
-      });
-      blogList.add(index.toString());
-      sp.setStringList('blogList', blogList);
-      print(blogList);
-    } else {
-      sp.setBool('$uid/$blogTitle/bookmark', false);
-
-      setState(() {
-        bookmarkIcon = bookmarkIconNormal;
-      });
-      blogList.remove(index.toString());
-      sp.setStringList('blogList', blogList);
-      print(blogList);
-    }
-  }
-
-  @override
-  void initState() {
-    _viewsCheck();
-    _loveIconCheck();
-    _bookmarkIconCheck();
-    super.initState();
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
+    final BlogBloc blogBloc = Provider.of<BlogBloc>(context);
+    // Provider.of<BlogBloc>(context, listen: false).loveIconCheck(blogTitle);
+    // Provider.of<BlogBloc>(context, listen: false).bookmarkIconCheck(blogTitle);
+
+    
     double w = MediaQuery.of(context).size.width;
     //double h = MediaQuery.of(context).size.height;
+
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -214,7 +75,9 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                           Icons.share,
                           size: 22,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Share.share('Install Travel Hour App now! https://example.com');
+                        },
                       ),
                     ],
                   ),
@@ -256,15 +119,16 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                           ),
                           Spacer(),
                           IconButton(
-                            icon: loveIcon,
+                            icon: blogBloc.loveIcon,
                             onPressed: () {
-                              _loveIconClicked();
+                              blogBloc.loveIconClicked(blogIndex, blogTitle);
                             },
                           ),
                           IconButton(
-                            icon: bookmarkIcon,
+                            icon: blogBloc.bookmarkIcon,
                             onPressed: () {
-                              _bookmarkIconClicked(blogIndex);
+                              blogBloc.bookmarkIconClicked(blogIndex, blogTitle, context);
+                              blogBloc.getBookmarkedBlogList();
                             },
                           ),
                         ],
@@ -299,7 +163,7 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                           color: Colors.grey[500],
                         ),
                         label: Text(
-                          'Views: $viewsAmount',
+                          'Views: ${blogBloc.allData[blogIndex].views}',
                           style: TextStyle(color: Colors.grey[500]),
                         ),
                         onPressed: () {},
@@ -314,7 +178,7 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                           color: Colors.grey[500],
                         ),
                         label: Text(
-                          'Loves: $loveAmount',
+                          'Loves: ${blogBloc.allData[blogIndex].loves}',
                           style: TextStyle(color: Colors.grey[500]),
                         ),
                         onPressed: () {},
@@ -328,7 +192,7 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15, right: 10),
                   child: Text(
-                    '$blogSubtitle',
+                    '$blogSubtitle \n\n$blogSubtitle',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

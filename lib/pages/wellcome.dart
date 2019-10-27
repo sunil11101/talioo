@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,7 +18,9 @@ class WellComePage extends StatefulWidget {
 
 class _WellComePageState extends State<WellComePage> {
 
-  var uI = 0;
+  int uI = 0;
+  int uI1 = 0;
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googlSignIn = new GoogleSignIn();
   String name, email, profilePic, uid, phone, joiningDate;
@@ -102,6 +106,18 @@ class _WellComePageState extends State<WellComePage> {
     await sharedPreferences.setString('uid', uid);
   }
 
+   
+   
+   afterSuccess(){
+   var duration = Duration(milliseconds: 3000);
+   return Timer(duration, nextPage);
+ }
+
+  void nextPage (){
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => IntroPage()
+    ));
+  }
 
   _setPage() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -112,7 +128,11 @@ class _WellComePageState extends State<WellComePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: uI == 0 ? welcomeUI() : loadingUI());
+        body: uI == 0 ? welcomeUI() 
+        
+        : uI1 == 0 ? loadingUI() :
+        
+        successUI());
   }
 
   Widget loadingUI() {
@@ -124,8 +144,18 @@ class _WellComePageState extends State<WellComePage> {
           Container(
             height: 180,
             width: 180,
-            child: CircularProgressIndicator(
-              strokeWidth: 5,
+            
+            child: FlareActor(
+
+              'assets/flr/load.flr',
+              animation : 'load',
+              //color: Colors.deepPurpleAccent,
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+
+            
+            
+            
             ),
           ),
           SizedBox(
@@ -133,7 +163,7 @@ class _WellComePageState extends State<WellComePage> {
           ),
           Text(
             'Signing with google....',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[500]),
           )
         ],
       ),
@@ -214,14 +244,18 @@ class _WellComePageState extends State<WellComePage> {
                 onPressed: () {
                   setState(() {
                     uI = 1;
+                    
                   });
-                  _signIn().whenComplete(() {
-                    _saveData().whenComplete(() {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => IntroPage()));
-                      _setPage();
+                  _signIn().then((f){
+                    _saveData().whenComplete((){
+                      setState(() {
+                        uI1 = 1;
+                        afterSuccess();
+                        _setPage();
+                      });
                     });
                   });
+                  
                 },
               )),
           SizedBox(
@@ -231,4 +265,28 @@ class _WellComePageState extends State<WellComePage> {
       ),
     );
   }
+
+  Widget successUI  (){
+    return Center(
+        child: Container(
+          height: 150,
+          width: 150,
+          child: FlareActor(
+              'assets/flr/success.flr',
+              animation : 'success',
+              //color: Colors.deepPurpleAccent,
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+
+            
+            
+            
+            ),
+        ),
+        
+      
+    );
+  }
+
+
 }

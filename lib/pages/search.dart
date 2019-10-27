@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
 
-import 'package:travel_hour/models/places_data.dart';
 import 'package:travel_hour/pages/details.dart';
 
 class SearchPage extends StatefulWidget {
@@ -12,42 +13,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  
   String txt = 'SUGGESTED PLACES';
   var formKey = GlobalKey<FormState>();
   var textFieldCtrl = TextEditingController();
 
-  List<PlaceData1> _allData = [];
-  PlaceData placeData = PlaceData();
-  List<PlaceData1> _filteredData = [];
+
   
 
-  _getData() {
-    for (var i = 0; i < placeData.placeName.length; i++) {
-      PlaceData1 d = PlaceData1(
-          placeData.image[i],
-          placeData.placeName[i],
-          placeData.location[i],
-          placeData.loves[i],
-          placeData.views[i],
-          placeData.comments[i],
-          placeData.placeDeatails[i],
-          placeData.imageList[i]
-          
-          );
-      _allData.add(d);
-    }
-  }
+  
 
-  _afterSearch(value) {
-    setState(() {
-      _filteredData = _allData
-          .where((u) => (u.name.toLowerCase().contains(value.toLowerCase()) ||
-              u.location.toLowerCase().contains(value.toLowerCase())))
-          .toList();
-    });
-  }
-
-  Widget beforeSearchUI() {
+  Widget beforeSearchUI(placesBloc) {
     return Expanded(
         child: GridView.count(
       crossAxisCount: 2,
@@ -55,7 +31,7 @@ class _SearchPageState extends State<SearchPage> {
       crossAxisSpacing: 15,
       mainAxisSpacing: 15,
       childAspectRatio: 0.8,
-      children: List.generate(_allData.length, (index) {
+      children: List.generate(placesBloc.allData.length, (index) {
         return InkWell(
           child: Hero(
             tag: 'heroExplore$index',
@@ -64,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
               children: <Widget>[
                 Container(
                   child: CachedNetworkImage(
-                    imageUrl: _allData[index].image,
+                    imageUrl: placesBloc.allData[index].image,
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -89,158 +65,14 @@ class _SearchPageState extends State<SearchPage> {
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
 
-                  // decoration: BoxDecoration(
-                  //   color: Colors.white,
-                  //   borderRadius: BorderRadius.circular(10),
-                  //   boxShadow: <BoxShadow> [
-                  //     BoxShadow(
-                  //       blurRadius: 2,
-                  //       color: Colors.grey[200],
-                  //       offset: Offset(5, 5)
-                  //     )
-                  //   ],
-                  //   image: DecorationImage(
-
-                  //     image: NetworkImage(imageList[index],),
-                  //     fit: BoxFit.cover
-                  //   )
-                  // ),
-                ),
-                Positioned(
-                  bottom: 30,
-                  left: 10,
-                  child: Text(
-                    _allData[index].name,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  child: Text(
-                    _allData[index].location,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    width: 80,
-                    child: FlatButton.icon(
-                      padding: EdgeInsets.all(0),
-                      color: Colors.grey.withOpacity(0.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                      ),
-                      icon: Icon(
-                        LineIcons.heart,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                      label: Text(
-                        '${_allData[index].loves.toString()}',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                )
-              ],
-            )),
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailsPage(
-                          placeName: _allData[index].name,
-                          placeLocation: _allData[index].location,
-                          loves: _allData[index].loves,
-                          views: _allData[index].views,
-                          comments: _allData[index].comments,
-                          picturesList: _allData[index].imageList,
-                          placeDetails: _allData[index].details,
-                          heroTag: 'heroExplore$index',
-                          placeIndex: index,
-                        )));
-          },
-        );
-      }),
-    ));
-  }
-
-  Widget afterSearchUI() {
-    return Expanded(
-      child: GridView.count(
-      crossAxisCount: 2,
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
-      childAspectRatio: 0.8,
-      children: List.generate(_filteredData.length, (index) {
-        return InkWell(
-          child: Hero(
-            tag: 'heroExplore$index',
-            child: GridTile(
-                child: Stack(
-              children: <Widget>[
-                Container(
-                  child: CachedNetworkImage(
-                    imageUrl: _filteredData[index].image,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        shape: BoxShape.rectangle,
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.grey[200],
-                              offset: Offset(5, 5),
-                              blurRadius: 2),
-                        ],
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => Icon(
-                      LineIcons.photo,
-                      size: 30,
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-
-                  // decoration: BoxDecoration(
-                  //   color: Colors.white,
-                  //   borderRadius: BorderRadius.circular(10),
-                  //   boxShadow: <BoxShadow> [
-                  //     BoxShadow(
-                  //       blurRadius: 2,
-                  //       color: Colors.grey[200],
-                  //       offset: Offset(5, 5)
-                  //     )
-                  //   ],
-                  //   image: DecorationImage(
-
-                  //     image: NetworkImage(imageList[index],),
-                  //     fit: BoxFit.cover
-                  //   )
-                  // ),
+                  
                 ),
                 Positioned(
                   bottom: 30,
                   left: 10,
                   right: 5,
                   child: Text(
-                    _filteredData[index].name,
+                    placesBloc.allData[index].name,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -251,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                   bottom: 10,
                   left: 10,
                   child: Text(
-                    _filteredData[index].location,
+                    placesBloc.allData[index].location,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -275,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
                         size: 25,
                       ),
                       label: Text(
-                        '${_filteredData[index].loves.toString()}',
+                        '${placesBloc.allData[index].loves.toString()}',
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       onPressed: () {},
@@ -286,17 +118,20 @@ class _SearchPageState extends State<SearchPage> {
             )),
           ),
           onTap: () {
+            placesBloc.viewsIncrement(index);
+            placesBloc.loveIconCheck(placesBloc.allData[index].name);
+            placesBloc.bookmarkIconCheck(placesBloc.allData[index].name);
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => DetailsPage(
-                          placeName: _filteredData[index].name,
-                          placeLocation: _filteredData[index].location,
-                          loves: _filteredData[index].loves,
-                          views: _filteredData[index].views,
-                          comments: _filteredData[index].comments,
-                          picturesList: _allData[index].imageList,
-                          placeDetails: _filteredData[index].details,
+                          placeName: placesBloc.allData[index].name,
+                          placeLocation: placesBloc.allData[index].location,
+                          loves: placesBloc.allData[index].loves,
+                          views: placesBloc.allData[index].views,
+                          comments: placesBloc.allData[index].comments,
+                          picturesList: placesBloc.allData[index].imageList,
+                          placeDetails: placesBloc.allData[index].details,
                           heroTag: 'heroExplore$index',
                           placeIndex: index,
                         )));
@@ -306,16 +141,130 @@ class _SearchPageState extends State<SearchPage> {
     ));
   }
 
-  @override
-  void initState() {
-    _getData();
-    super.initState();
+  Widget afterSearchUI(placesBloc) {
+    return Expanded(
+      child: GridView.count(
+      crossAxisCount: 2,
+      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+      crossAxisSpacing: 15,
+      mainAxisSpacing: 15,
+      childAspectRatio: 0.8,
+      children: List.generate(placesBloc.filteredData.length, (index) {
+        return InkWell(
+          child: Hero(
+            tag: 'heroExplore$index',
+            child: GridTile(
+                child: Stack(
+              children: <Widget>[
+                Container(
+                  child: CachedNetworkImage(
+                    imageUrl: placesBloc.filteredData[index].image,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        shape: BoxShape.rectangle,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              offset: Offset(5, 5),
+                              blurRadius: 2),
+                        ],
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => Icon(
+                      LineIcons.photo,
+                      size: 30,
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+
+                ),
+                Positioned(
+                  bottom: 30,
+                  left: 10,
+                  right: 5,
+                  child: Text(
+                    placesBloc.filteredData[index].name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 10,
+                  child: Text(
+                    placesBloc.filteredData[index].location,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Container(
+                    width: 80,
+                    child: FlatButton.icon(
+                      padding: EdgeInsets.all(0),
+                      color: Colors.grey.withOpacity(0.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      icon: Icon(
+                        LineIcons.heart,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                      label: Text(
+                        '${placesBloc.filteredData[index].loves.toString()}',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                )
+              ],
+            )),
+          ),
+          onTap: () {
+            placesBloc.viewsIncrement(index);
+            placesBloc.loveIconCheck(placesBloc.filteredData[index].name);
+            placesBloc.bookmarkIconCheck(placesBloc.filteredData[index].name);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailsPage(
+                          placeName: placesBloc.filteredData[index].name,
+                          placeLocation: placesBloc.filteredData[index].location,
+                          loves: placesBloc.filteredData[index].loves,
+                          views: placesBloc.filteredData[index].views,
+                          comments: placesBloc.filteredData[index].comments,
+                          picturesList: placesBloc.filteredData[index].imageList,
+                          placeDetails: placesBloc.filteredData[index].details,
+                          heroTag: 'heroExplore$index',
+                          placeIndex: index,
+                        )));
+          },
+        );
+      }),
+    ));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
 
     return Scaffold(
       body: Column(
@@ -384,9 +333,9 @@ class _SearchPageState extends State<SearchPage> {
 
                   return value = null;
                 },
-                onSaved: (String value) {},
+                // onSaved: (String value) {},
                 onChanged: (String value) {
-                  this._afterSearch(value);
+                  placesBloc.afterSearch(value);
                 },
               ),
             ),
@@ -415,7 +364,7 @@ class _SearchPageState extends State<SearchPage> {
 
           
           //afterSearchUI()
-          _filteredData.isEmpty ? beforeSearchUI() : afterSearchUI()
+          placesBloc.filteredData.isEmpty ? beforeSearchUI(placesBloc) : afterSearchUI(placesBloc)
         ],
       ),
     );

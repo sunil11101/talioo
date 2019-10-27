@@ -1,44 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
 
-import 'package:travel_hour/models/places_data.dart';
 import 'package:travel_hour/pages/details.dart';
 
 
-class PlacesNearYou extends StatefulWidget {
+class PlacesNearYou extends StatelessWidget {
   PlacesNearYou({Key key}) : super(key: key);
 
-  _PlacesNearYouState createState() => _PlacesNearYouState();
-}
-
-class _PlacesNearYouState extends State<PlacesNearYou> {
-
-  PlaceData placeData = PlaceData();
-  List<PlaceData1> _allData = [];
-
-    _getData(){
-    for (var i = 0; i < placeData.placeName.length; i++) {
-      PlaceData1 d = PlaceData1(
-        placeData.image[i], 
-        placeData.placeName[i],
-        placeData.location[i], 
-        placeData.loves[i], 
-        placeData.views[i], 
-        placeData.comments[i], 
-        placeData.placeDeatails[i],
-        placeData.imageList[i]
-        
-        );
-      _allData.add(d);
-      _allData.sort((a,b) => b.views.compareTo(a.views));
-      
-    }
-  }
-
-  Widget cachedImage(index) {
+ Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
-      imageUrl: _allData[index].image,
+      imageUrl: placesBloc.allData[index].image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -63,26 +37,24 @@ class _PlacesNearYouState extends State<PlacesNearYou> {
   }
 
 
-  
-
-  @override
-  void initState() {
-    
-    _getData();
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
+    //placesBloc.allData.isEmpty? placesBloc.getData(): print('null') ;
+    
     double w = MediaQuery.of(context).size.width;
     //double h = MediaQuery.of(context).size.height;
+
+
+    
+
     return Container(
               height: 205,
               width: w,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _allData.length,
+                itemCount: placesBloc.allData.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 15),
@@ -91,10 +63,10 @@ class _PlacesNearYouState extends State<PlacesNearYou> {
                         children: <Widget>[
                           Hero(
                             tag: 'heroPlacesNearYou$index',
-                                                      child: Container(
+                              child: Container(
                               height: 200,
                               width: w * 0.35,
-                              child: cachedImage(index),
+                              child: cachedImage(index, placesBloc),
 
                               
                             ),
@@ -114,7 +86,7 @@ class _PlacesNearYouState extends State<PlacesNearYou> {
                                 size: 20,
                               ),
                               label: Text(
-                                _allData[index].loves.toString(),
+                                placesBloc.allData[index].loves.toString(),
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 13),
                               ),
@@ -130,12 +102,12 @@ class _PlacesNearYouState extends State<PlacesNearYou> {
                               children: <Widget>[
                                 SizedBox(
                                     width: w * 0.32,
-                                    child: Text(_allData[index].name,
+                                    child: Text(placesBloc.allData[index].name,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600))),
-                                Text(_allData[index].location,
+                                Text(placesBloc.allData[index].location,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
@@ -146,17 +118,20 @@ class _PlacesNearYouState extends State<PlacesNearYou> {
                         ],
                       ),
                       onTap: () {
+                      placesBloc.viewsIncrement(index);
+                      placesBloc.loveIconCheck(placesBloc.allData[index].name);
+                      placesBloc.bookmarkIconCheck(placesBloc.allData[index].name);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DetailsPage(
-                                      placeName: _allData[index].name,
-                                    placeLocation: _allData[index].location,
-                                    loves: _allData[index].loves,
-                                    views: _allData[index].views,
-                                    comments: _allData[index].comments,
-                                    picturesList: _allData[index].imageList,
-                                    placeDetails: _allData[index].details,
+                                    placeName: placesBloc.allData[index].name,
+                                    placeLocation: placesBloc.allData[index].location,
+                                    loves: placesBloc.allData[index].loves,
+                                    views: placesBloc.allData[index].views,
+                                    comments: placesBloc.allData[index].comments,
+                                    picturesList: placesBloc.allData[index].imageList,
+                                    placeDetails: placesBloc.allData[index].details,
                                       heroTag: 'heroPlacesNearYou$index',
                                       placeIndex: index,
                                     )));

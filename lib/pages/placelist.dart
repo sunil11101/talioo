@@ -1,52 +1,27 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
 
-
-import 'package:travel_hour/models/places_data.dart';
 import 'package:travel_hour/pages/details.dart';
+import 'package:travel_hour/models/variables.dart';
 
 
-class PlaceListPage extends StatefulWidget {
+class PlaceListPage extends StatelessWidget {
   final String title;
   
   
   PlaceListPage({Key key, @required this.title}) : super(key: key);
 
-  _PlaceListPageState createState() => _PlaceListPageState(this.title);
-}
-
-class _PlaceListPageState extends State<PlaceListPage> {
-
-  String title;
-  
-  _PlaceListPageState(this.title);
-
-    var textStyleBold = TextStyle(
-      fontFamily: 'Raleway',
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-      color: Colors.black);
-
-  var textStyleSmallBold = TextStyle(
-      fontFamily: 'Raleway',
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-      color: Colors.black);
 
 
-
-  var textStylicon = TextStyle(
-      fontFamily: 'Raleway',
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-      color: Colors.grey[800]);
-
-
-    Widget cachedImage(index) {
+  Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
-      imageUrl: _allData[index].image,
+      imageUrl: placesBloc.allData[index].image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -70,53 +45,34 @@ class _PlaceListPageState extends State<PlaceListPage> {
     );
   }
 
-  List<PlaceData1> _allData = [];
-  PlaceData placeData = PlaceData();
-
-  _getData(){
-    for (var i = 0; i < placeData.placeName.length; i++) {
-      PlaceData1 d = PlaceData1(
-        placeData.image[i], 
-        placeData.placeName[i],
-        placeData.location[i], 
-        placeData.loves[i], 
-        placeData.views[i], 
-        placeData.comments[i], 
-        placeData.placeDeatails[i],
-        placeData.imageList[i]
-        
-        );
-      _allData.add(d);
-    }
-  }
-
-  @override
-  void initState() {
-    _getData();
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
+
+
+
     double w = MediaQuery.of(context).size.width;
     //double h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.grey[150],
       appBar: AppBar(
-        
+        brightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
         title: Text('$title',style: textStyleBold,),
         centerTitle: false,
         
         elevation: 0,
         
         
-        actions: <Widget>[
-          IconButton(icon: Icon(LineIcons.sort), onPressed: () {},)
-        ],
+        // actions: <Widget>[
+        //   IconButton(icon: Icon(LineIcons.sort), onPressed: () {},)
+        // ],
       ),
       body:  AnimationLimiter(
               child: ListView.builder(
-          itemCount: _allData.length,
+          itemCount: placesBloc.allData.length,
           itemBuilder: (BuildContext context, int index) {
           return  AnimationConfiguration.staggeredList(
                 position: index,
@@ -158,9 +114,9 @@ class _PlaceListPageState extends State<PlaceListPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(_allData[index].name,style: textStyleBold,),
+                                    Text(placesBloc.allData[index].name,style: textStyleBold,),
                                     
-                                    Text(_allData[index].location,style: TextStyle(fontSize: 12,color: Colors.grey[500],fontWeight: FontWeight.w600),),
+                                    Text(placesBloc.allData[index].location,style: TextStyle(fontSize: 12,color: Colors.grey[500],fontWeight: FontWeight.w600),),
                                                             
                                     Divider(color: Colors.grey[400],height: 20,),
                                     
@@ -171,13 +127,13 @@ class _PlaceListPageState extends State<PlaceListPage> {
                                         children: <Widget>[
 
                                           Icon(LineIcons.heart,size: 18,color: Colors.orangeAccent,),
-                                          Text(' ${_allData[index].loves}',style: textStylicon,),
+                                          Text(' ${placesBloc.allData[index].loves}',style: textStylicon,),
                                           Spacer(),
                                           Icon(LineIcons.eye,size: 18,color: Colors.grey,),
-                                          Text(' ${_allData[index].views}',style: textStylicon,),
+                                          Text(' ${placesBloc.allData[index].views}',style: textStylicon,),
                                           Spacer(),
                                           Icon(LineIcons.comment_o,size: 18,color: Colors.grey,),
-                                          Text(' ${_allData[index].comments}',style: textStylicon,),
+                                          Text(' ${placesBloc.allData[index].comments}',style: textStylicon,),
                                           Spacer(),
 
 
@@ -212,7 +168,7 @@ class _PlaceListPageState extends State<PlaceListPage> {
                               
                               height: 120,
                               width: 120,
-                              child: cachedImage(index),
+                              child: cachedImage(index, placesBloc),
                           
                             ),
                     )
@@ -223,16 +179,18 @@ class _PlaceListPageState extends State<PlaceListPage> {
               ),
 
               onTap: (){
-                print('hero$index');
+            placesBloc.viewsIncrement(index);
+            placesBloc.loveIconCheck(placesBloc.allData[index].name);
+            placesBloc.bookmarkIconCheck(placesBloc.allData[index].name);
                 Navigator.push(context, MaterialPageRoute(
                               builder: (context) => DetailsPage(
-                                  placeName: _allData[index].name,
-                                    placeLocation: _allData[index].location,
-                                    loves: _allData[index].loves,
-                                    views: _allData[index].views,
-                                    comments: _allData[index].comments,
-                                    picturesList: _allData[index].imageList,
-                                    placeDetails: _allData[index].details,
+                                  placeName: placesBloc.allData[index].name,
+                                    placeLocation: placesBloc.allData[index].location,
+                                    loves: placesBloc.allData[index].loves,
+                                    views: placesBloc.allData[index].views,
+                                    comments: placesBloc.allData[index].comments,
+                                    picturesList: placesBloc.allData[index].imageList,
+                                    placeDetails: placesBloc.allData[index].details,
                                   heroTag: 'hero$index',
                                   placeIndex: index,
                               ) ));

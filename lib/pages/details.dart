@@ -3,19 +3,16 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
 import 'package:travel_hour/pages/placelist.dart';
-
 import 'package:travel_hour/widgets/other_places.dart';
 import 'package:travel_hour/widgets/todo.dart';
 
 
-class MyData {
-  List<String> listbook;
-}
 
-class DetailsPage extends StatefulWidget {
+
+class DetailsPage extends StatelessWidget {
   final String placeName, placeLocation,placeDetails,heroTag;
   final List picturesList;
   final int loves, views, comments, placeIndex;
@@ -37,178 +34,10 @@ class DetailsPage extends StatefulWidget {
       })
       : super(key: key);
 
-  _DetailsPageState createState() => _DetailsPageState(
-  
-      this.placeName,
-      this.placeLocation,
-      
-      this.placeDetails,
-      this.heroTag,
-      this.picturesList,
-      this.loves,
-      this.views,
-      this.comments,
-      this.placeIndex
-      );
-}
-
-class _DetailsPageState extends State<DetailsPage> {
-  String placeName, placeLocation,  placeDetails,heroTag;
-  List picturesList;
-  int loves, views, comments,placeIndex;
-  _DetailsPageState(this.placeName,
-      this.placeLocation,
-      
-      this.placeDetails,
-      this.heroTag,
-      this.picturesList,
-      this.loves,
-      this.views,
-      this.comments,
-      this.placeIndex
-      );
-
-  Icon loveIcon = Icon(Icons.favorite_border,color: Colors.grey,);
-  Icon loveIconNormal = Icon(Icons.favorite_border,color: Colors.grey,);
-  Icon loveIconBold = Icon(
-    Icons.favorite,
-    color: Colors.pinkAccent,
-  );
-  int loveAmount;
-  int viewsAmount;
-
-  Icon bookmarkIcon = Icon(
-    Icons.bookmark_border,
-    color: Colors.grey,
-  );
-  Icon bookmarkIconNormal = Icon(
-    Icons.bookmark_border,
-    color: Colors.grey,
-  );
-  Icon bookmarkIconBold = Icon(
-    Icons.bookmark,
-    color: Colors.grey[700],
-  );
-
-  List <String> placeList = [];
-
-  _viewsCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    int views = sp.getInt('$placeName/views') ?? 10000;
-    int _viewsAmount = (views + (1));
-    sp.setInt('$placeName/views', _viewsAmount);
-    setState(() {
-      viewsAmount = _viewsAmount;
-    });
-  }
-
-  _loveIconCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-    bool checked = sp.getBool('$uid/$placeName/love') ?? false;
-    int _loveAmount = sp.getInt('$uid/$placeName/loveAmount') ?? 10;
-    if (checked == false) {
-      setState(() {
-        loveIcon = loveIconNormal;
-        loveAmount = _loveAmount;
-      });
-    } else {
-      setState(() {
-        loveIcon = loveIconBold;
-        loveAmount = _loveAmount;
-      });
-    }
-  }
-
-  _loveIconClicked() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool clicked = sp.getBool('$uid/$placeName/love') ?? false;
-    int _loveAmount = sp.getInt('$uid/$placeName/loveAmount') ?? 10;
-    if (clicked == false) {
-      sp.setBool('$uid/$placeName/love', true);
-      int count = (_loveAmount + (1));
-      setState(() {
-        loveIcon = loveIconBold;
-        sp.setInt('$uid/$placeName/loveAmount', count);
-        loveAmount = count;
-      });
-    } else {
-      sp.setBool('$uid/$placeName/love', false);
-      int count = (_loveAmount - (1));
-      setState(() {
-        loveIcon = loveIconNormal;
-        sp.setInt('$uid/$placeName/loveAmount', count);
-        loveAmount = count;
-      });
-    }
-  }
-
-  _bookmarkIconCheck() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool checked = sp.getBool('$uid/$placeName/bookmark') ?? false;
-    List<String> _placeList = sp.getStringList('placeList')??[];
-    setState(() {
-      placeList = _placeList;
-      print(placeList);
-    });
-    if (checked == false) {
-      setState(() {
-        bookmarkIcon = bookmarkIconNormal;
-      });
-    } else {
-      setState(() {
-        bookmarkIcon = bookmarkIconBold;
-      });
-    }
-  }
-
-  _bookmarkIconClicked(index) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String uid = sp.getString('uid') ?? 'uid';
-
-    bool clicked = sp.getBool('$uid/$placeName/bookmark') ?? false;
-
-    if (clicked == false) {
-      sp.setBool('$uid/$placeName/bookmark', true);
-      Toast.show('Added to your bookmark list', context,
-        duration: Toast.LENGTH_LONG,
-        backgroundColor: Colors.grey
-      );
-      setState(() {
-        bookmarkIcon = bookmarkIconBold;
-      });
-      placeList.add(index.toString());
-      sp.setStringList('placeList', placeList);
-      print(placeList);
-
-    } else {
-      sp.setBool('$uid/$placeName/bookmark', false);
-
-      setState(() {
-        bookmarkIcon = bookmarkIconNormal;
-      });
-      placeList.remove(index.toString());
-      sp.setStringList('placeList', placeList);
-      print(placeList);
-    }
-  }
 
 
 
-  @override
-  void initState() {
-    
-    print(heroTag);
-    _viewsCheck();
-    _loveIconCheck();
-    _bookmarkIconCheck();
-    
-    super.initState();
-  }
+
 
   Widget cachedImage(index) {
     return CachedNetworkImage(
@@ -222,10 +51,7 @@ class _DetailsPageState extends State<DetailsPage> {
               bottomLeft: Radius.circular(30),
               bottomRight: Radius.circular(30)),
           shape: BoxShape.rectangle,
-          // boxShadow: <BoxShadow>[
-          //   BoxShadow(
-          //       color: Colors.grey[200], offset: Offset(5, 5), blurRadius: 2),
-          // ],
+          
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.cover,
@@ -244,6 +70,16 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
+//    placesBloc.loveIconCheck(placeName);
+//    placesBloc.bookmarkIconCheck(placeName);
+    // Provider.of<PlacesBloc>(context, listen: false).loveIconCheck(placeName);
+    // Provider.of<PlacesBloc>(context, listen: false).bookmarkIconCheck(placeName);
+
+
+
+
+
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -263,13 +99,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       height: h * 0.45,
                       width: w,
                       decoration: BoxDecoration(
-                        
-                        // boxShadow: <BoxShadow>[
-                        //   BoxShadow(
-                        //       color: Colors.grey[300],
-                        //       blurRadius: 50,
-                        //       offset: Offset(5, 5))
-                        // ],
+                    
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(30),
@@ -349,18 +179,21 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                           Spacer(),
                           IconButton(
-                            icon: loveIcon,
+                            icon: placesBloc.loveIcon,
                             iconSize: 28,
                             onPressed: () {
-                              _loveIconClicked();
+                              placesBloc.loveIconClicked(placeIndex, placeName);
+                              
+                              
                             },
                           ),
                           
                           IconButton(
-                            icon: bookmarkIcon,
+                            icon: placesBloc.bookmarkIcon,
                             iconSize: 28,
                             onPressed: () {
-                              _bookmarkIconClicked(placeIndex);
+                              placesBloc.bookmarkIconClicked(placeIndex, placeName, context);
+                              placesBloc.getBookmarkedPlaceList();
                             },
                           ),
                         ],
@@ -398,7 +231,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               size: 20,
                               color: Colors.grey,
                             ),
-                            Text(' $viewsAmount',
+                            Text(' ${placesBloc.allData[placeIndex].views}',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.grey)),
                             SizedBox(
@@ -409,7 +242,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               size: 20,
                               color: Colors.grey,
                             ),
-                            Text(' $loveAmount',
+                            Text(' ${placesBloc.allData[placeIndex].loves}',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.grey)),
                             SizedBox(
@@ -420,7 +253,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               size: 20,
                               color: Colors.grey,
                             ),
-                            Text(' $comments',
+                            Text(' ${placesBloc.allData[placeIndex].comments}',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.grey)),
                           ],
@@ -512,6 +345,3 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 }
-
-
-

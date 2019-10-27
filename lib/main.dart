@@ -1,9 +1,12 @@
-
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_hour/pages/wellcome.dart';
-import 'package:travel_hour/widgets/navbar.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_hour/blocs/blog_bloc.dart';
+import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:travel_hour/pages/splash.dart';
+
+
 
 void main() {
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -24,36 +27,37 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  int x = 0;
-
-  //checking which page open first
-  _checkPage() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    int _x = sp.getInt('x') ?? 0;
-    setState(() {
-      x = _x;
-    });
-  }
-
-  @override
-  void initState() {
-    _checkPage();
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (context) => PlacesBloc(),
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => BlogBloc(),
+          
+        ),
+        
+        
+      ],
+      child: MaterialApp(
       theme: ThemeData(
           primarySwatch: Colors.blue,
           fontFamily: 'Raleway',
           appBarTheme: AppBarTheme(
-            color: Colors.grey[50],
+            color: Colors.transparent,
             elevation: 0,
             iconTheme: IconThemeData(
               color: Colors.black,
             ),
-            //brightness: Brightness.light,
+            brightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
+            
+            
+            
+            
             textTheme: TextTheme(
                 title: TextStyle(
                     color: Colors.black,
@@ -63,9 +67,10 @@ class _MyAppState extends State<MyApp> {
                     )),
           )),
       debugShowCheckedModeBanner: false,
-      home: 
-      //WellComePage()
-      x == 0 ? WellComePage() : NavBar(),
+      home: SplashPage()
+      
+    ),
     );
+
   }
 }
