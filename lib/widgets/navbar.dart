@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 
 import 'package:travel_hour/pages/blog.dart';
 import 'package:travel_hour/pages/bookmark.dart';
 import 'package:travel_hour/pages/home.dart';
-
 
 class NavBar extends StatefulWidget {
   NavBar({Key key}) : super(key: key);
@@ -14,7 +13,6 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-
   Widget page = HomePage();
   int _cIndex = 0;
 
@@ -29,7 +27,9 @@ class _NavBarState extends State<NavBar> {
   Color dotColor2 = Colors.white;
   Color dotColor3 = Colors.white;
 
-
+  whenBackButtonClicked() {
+    SystemNavigator.pop();
+  }
 
   BottomNavigationBar navbar() {
     return BottomNavigationBar(
@@ -46,7 +46,7 @@ class _NavBarState extends State<NavBar> {
       items: [
         BottomNavigationBarItem(
           icon: Padding(
-            padding: const EdgeInsets.only(left: 20,top: 3),
+            padding: const EdgeInsets.only(left: 20, top: 3),
             child: Icon(
               Icons.explore,
             ),
@@ -101,7 +101,7 @@ class _NavBarState extends State<NavBar> {
 
         if (index == 1) {
           setState(() {
-            page = ArticlesPage();
+            page = BlogPage();
             dotColor = Colors.white;
             dotColor1 = Colors.white;
             dotColor2 = Colors.black;
@@ -124,8 +124,13 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: navbar(),
-      body: page);
+    return WillPopScope(
+      onWillPop: () {
+        return whenBackButtonClicked();
+      },
+      child: Scaffold(
+        bottomNavigationBar: navbar(), 
+        body: page),
+    );
   }
 }

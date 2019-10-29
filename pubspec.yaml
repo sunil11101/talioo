@@ -76,20 +76,20 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/search.png
-    - assets/travel1.png
-    - assets/travel2.png
+    - assets/images/search.png
+    - assets/images/travel1.png
+    - assets/images/travel2.png
     - assets/flr/success.flr
     - assets/flr/load.flr
     - assets/flr/splash.flr
-    - assets/travel4.png
-    - assets/travel5.png
-    - assets/travel6.png
-    - assets/empty.png
-    - assets/restaurant.png
-    - assets/hotel.png
-    - assets/splash.png
-    - assets/icon.png
+    - assets/images/travel4.png
+    - assets/images/travel5.png
+    - assets/images/travel6.png
+    - assets/images/empty.png
+    - assets/images/restaurant.png
+    - assets/images/hotel.png
+    - assets/images/splash.png
+    - assets/images/icon.png
 
 
   #  - images/a_dot_burr.jpeg

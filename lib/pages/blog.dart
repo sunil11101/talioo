@@ -10,8 +10,8 @@ import 'package:travel_hour/models/variables.dart';
 import 'package:travel_hour/pages/blog_details.dart';
 
 
-class ArticlesPage extends StatelessWidget {
-  ArticlesPage({Key key}) : super(key: key);
+class BlogPage extends StatelessWidget {
+  BlogPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class ArticlesPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ArticlesDetailsPage(
+                                    builder: (context) => BlogDetailsPage(
                                           blogTitle:
                                               blogBloc.allData[index].title,
                                           blogImage:

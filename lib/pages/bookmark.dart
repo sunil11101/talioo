@@ -11,9 +11,12 @@ import 'package:travel_hour/blocs/places_bloc.dart';
 
 import 'package:travel_hour/models/blog.dart';
 import 'package:travel_hour/models/places_data.dart';
-import 'package:travel_hour/pages/blog_details.dart';
+
 import 'package:travel_hour/pages/details.dart';
+import 'package:travel_hour/pages/blog_details.dart';
+
 import 'package:travel_hour/models/variables.dart';
+
 
 
 
@@ -107,7 +110,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
           Image(
             height: 200,
             width: 200,
-            image: AssetImage('assets/empty.png'),
+            image: AssetImage('assets/images/empty.png'),
             fit: BoxFit.contain,
           ),
           SizedBox(
@@ -222,7 +225,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ArticlesDetailsPage(
+                        builder: (context) => BlogDetailsPage(
                               blogTitle: blogData.blogTitle[blogBloc.blogListInt[index]],
                               blogImage: blogData.blogImage[blogBloc.blogListInt[index]],
                               blogSubtitle:

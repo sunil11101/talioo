@@ -6,15 +6,7 @@ import 'package:travel_hour/blocs/blog_bloc.dart';
 import 'package:travel_hour/blocs/places_bloc.dart';
 import 'package:travel_hour/pages/splash.dart';
 
-
-
 void main() {
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //     //systemNavigationBarColor: Colors.blueAccent,
-  //     //systemNavigationBarIconBrightness: Brightness.dark, // navigation bar color
-  //     statusBarColor: Colors.grey[300].withOpacity(0.3),
-  //     statusBarIconBrightness: Brightness.dark // status bar color
-  //     ));
   runApp(MyApp());
 }
 
@@ -26,9 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -38,39 +27,29 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           builder: (context) => BlogBloc(),
-          
         ),
-        
-        
       ],
       child: MaterialApp(
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          fontFamily: 'Raleway',
-          appBarTheme: AppBarTheme(
-            color: Colors.transparent,
-            elevation: 0,
-            iconTheme: IconThemeData(
-              color: Colors.black,
-            ),
-            brightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
-            
-            
-            
-            
-            textTheme: TextTheme(
-                title: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    fontFamily: 'Raleway'
-                    )),
-          )),
-      debugShowCheckedModeBanner: false,
-      home: SplashPage()
-      
-    ),
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              fontFamily: 'Raleway',
+              appBarTheme: AppBarTheme(
+                color: Colors.transparent,
+                elevation: 0,
+                iconTheme: IconThemeData(
+                  color: Colors.black,
+                ),
+                brightness:
+                    Platform.isAndroid ? Brightness.dark : Brightness.light,
+                textTheme: TextTheme(
+                    title: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        fontFamily: 'Raleway')),
+              )),
+          debugShowCheckedModeBanner: false,
+          home: SplashPage()),
     );
-
   }
 }

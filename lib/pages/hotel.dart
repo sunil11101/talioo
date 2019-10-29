@@ -76,7 +76,7 @@ class _HotelPageState extends State<HotelPage> {
     super.initState();
   }
 
-  _restaurantList(index) {
+  _hotelList(index) {
     return AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, Widget widget) {
@@ -111,7 +111,7 @@ class _HotelPageState extends State<HotelPage> {
             child: Row(
               children: <Widget>[
                 Image(
-                  image: AssetImage('assets/hotel.png'),
+                  image: AssetImage('assets/images/hotel.png'),
                   height: 60,
                   width: 60,
                 ),
@@ -329,7 +329,7 @@ class _HotelPageState extends State<HotelPage> {
               controller: _pageController,
               itemCount: _alldata.length,
               itemBuilder: (BuildContext context, int index) {
-                return _restaurantList(index);
+                return _hotelList(index);
               },
             ),
           ),

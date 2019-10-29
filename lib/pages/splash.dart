@@ -69,7 +69,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin{
       child: RotationTransition(
               turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
               child: Image(
-                image: AssetImage('assets/splash.png'),
+                image: AssetImage('assets/images/splash.png'),
                 height: 120,
                 width: 120,
                 fit: BoxFit.contain,

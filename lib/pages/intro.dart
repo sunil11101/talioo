@@ -99,7 +99,7 @@ class _IntroPageState extends State<IntroPage> {
             alignment: Alignment.center,
             height: h * 0.38,
             child: Image(
-              image: AssetImage('assets/travel6.png'),
+              image: AssetImage('assets/images/travel6.png'),
               fit: BoxFit.contain,
             ),
           ),
@@ -149,7 +149,7 @@ class _IntroPageState extends State<IntroPage> {
             alignment: Alignment.center,
             height: h * 0.38,
             child: Image(
-              image: AssetImage('assets/travel1.png'),
+              image: AssetImage('assets/images/travel1.png'),
               fit: BoxFit.contain,
             ),
           ),
@@ -193,7 +193,7 @@ class _IntroPageState extends State<IntroPage> {
             alignment: Alignment.center,
             height: h * 0.38,
             child: Image(
-              image: AssetImage('assets/travel5.png'),
+              image: AssetImage('assets/images/travel5.png'),
               fit: BoxFit.contain,
             ),
           ),

@@ -8,7 +8,7 @@ import 'package:travel_hour/blocs/blog_bloc.dart';
 
 
 
-class ArticlesDetailsPage extends StatelessWidget {
+class BlogDetailsPage extends StatelessWidget {
   final String blogTitle,
       blogSubtitle,
       blogSource,
@@ -17,7 +17,7 @@ class ArticlesDetailsPage extends StatelessWidget {
 
   final int blogLoves, blogViews, blogIndex, blogListIndex;
 
-  ArticlesDetailsPage(
+  BlogDetailsPage(
       {Key key,
       @required this.blogTitle,
       this.blogImage,

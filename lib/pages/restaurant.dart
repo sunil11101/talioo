@@ -115,7 +115,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
             child: Row(
               children: <Widget>[
                 Image(
-                  image: AssetImage('assets/restaurant.png'),
+                  image: AssetImage('assets/images/restaurant.png'),
                   height: 60,
                   width: 60,
                 ),

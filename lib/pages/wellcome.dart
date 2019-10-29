@@ -184,7 +184,7 @@ class _WellComePageState extends State<WellComePage> {
             alignment: Alignment.center,
             height: h * 0.38,
             child: Image(
-              image: AssetImage('assets/travel4.png'),
+              image: AssetImage('assets/images/travel4.png'),
               fit: BoxFit.contain,
             ),
           ),
