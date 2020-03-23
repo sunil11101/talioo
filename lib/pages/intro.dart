@@ -1,7 +1,10 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_hour/widgets/navbar.dart';
+import 'package:talio_travel/widgets/navbar.dart';
+
+
+//intro page
 
 class IntroPage extends StatefulWidget {
   const IntroPage({Key key}) : super(key: key);
@@ -11,8 +14,11 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
+  
   String name;
 
+
+  // getting name from shared preferances after signin is completed
   _getName() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String _name = sp.getString('userName') ?? 'User';
@@ -44,7 +50,7 @@ class _IntroPageState extends State<IntroPage> {
               autoplay: true,
               dotBgColor: Colors.transparent,
               dotSize: 7,
-              images: [page1(), page2(), page3()],
+              images: [page1(), page2(), page3()],   // slideshow of 3 pages
             ),
           ),
           SizedBox(

@@ -2,14 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
 
-import 'package:travel_hour/pages/details.dart';
+import 'package:talio_travel/pages/details.dart';
+
+// used in homepage
 
 
 class PopularPlaces extends StatelessWidget {
   PopularPlaces({Key key}) : super(key: key);
 
+
+  // this is callback function and using cached image for saving online images
   Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
       imageUrl: placesBloc.allData[index].image,

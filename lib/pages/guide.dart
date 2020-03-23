@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:travel_hour/models/guide.dart';
+import 'package:talio_travel/models/guide.dart';
 
-
+// travel guide page
 
 
 class GuidePage extends StatefulWidget {
@@ -21,6 +21,8 @@ class _GuidePageState extends State<GuidePage> {
   List<Marker> _markers = [];
   List<Polyline> _polylines = [];
 
+
+  // adding markers ofthe two location
   _addMarker() {
     for (var i = 0; i < _mapDetails.placename.length; i++) {
       setState(() {
@@ -34,6 +36,7 @@ class _GuidePageState extends State<GuidePage> {
     }
   }
 
+ // adding polyline between two location
   _addPolyline() {
     setState(() {
       _polylines.add(Polyline(
@@ -52,6 +55,8 @@ class _GuidePageState extends State<GuidePage> {
     _addPolyline();
   }
 
+
+  //popuup bottom ui
   Widget panelUI() {
     return Column(
       children: <Widget>[
@@ -133,6 +138,7 @@ class _GuidePageState extends State<GuidePage> {
     );
   }
 
+  // background ui
   Widget panelBodyUI(h, w) {
     return Container(
       width: w,

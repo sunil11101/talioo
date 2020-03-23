@@ -4,14 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
-import 'package:travel_hour/pages/placelist.dart';
-import 'package:travel_hour/widgets/other_places.dart';
-import 'package:travel_hour/widgets/todo.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
+import 'package:talio_travel/pages/placelist.dart';
+import 'package:talio_travel/widgets/other_places.dart';
+import 'package:talio_travel/widgets/todo.dart';
 
 
+// place details page
 
 
+// geting data for selected place
 class DetailsPage extends StatelessWidget {
   final String placeName, placeLocation,placeDetails,heroTag;
   final List picturesList;
@@ -38,7 +40,7 @@ class DetailsPage extends StatelessWidget {
 
 
 
-
+  // this is callback function and using cached image for saving online images
   Widget cachedImage(index) {
     return CachedNetworkImage(
       imageUrl: picturesList[index],
@@ -70,16 +72,10 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
-//    placesBloc.loveIconCheck(placeName);
-//    placesBloc.bookmarkIconCheck(placeName);
-    // Provider.of<PlacesBloc>(context, listen: false).loveIconCheck(placeName);
-    // Provider.of<PlacesBloc>(context, listen: false).bookmarkIconCheck(placeName);
-
-
-
-
-
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context); //to access place data
+    
+    
+    
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -113,7 +109,7 @@ class DetailsPage extends StatelessWidget {
                         images: [
                           cachedImage(0),
                           cachedImage(1),
-                          cachedImage(2),
+                          cachedImage(2),     //slideshow
                           cachedImage(3),
                           cachedImage(4)
                         ],
@@ -192,8 +188,8 @@ class DetailsPage extends StatelessWidget {
                             icon: placesBloc.bookmarkIcon,
                             iconSize: 28,
                             onPressed: () {
-                              placesBloc.bookmarkIconClicked(placeIndex, placeName, context);
-                              placesBloc.getBookmarkedPlaceList();
+                              placesBloc.bookmarkIconClicked(placeIndex, placeName, context);  //after bookmark icon clicks
+                              placesBloc.getBookmarkedPlaceList();     //getting bookmarked places list
                             },
                           ),
                         ],

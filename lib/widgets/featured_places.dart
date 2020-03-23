@@ -3,11 +3,11 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
 
 
-import 'package:travel_hour/pages/details.dart';
-import 'package:travel_hour/models/variables.dart';
+import 'package:talio_travel/pages/details.dart';
+import 'package:talio_travel/models/variables.dart';
 
 class Featured extends StatefulWidget {
   Featured({Key key}) : super(key: key);
@@ -20,6 +20,7 @@ class _FeaturedState extends State<Featured> {
   
   int listIndex = 2;
 
+  // this is callback function and using cached image for saving online images  
   Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
       imageUrl: placesBloc.allData[index].image,
@@ -53,13 +54,9 @@ class _FeaturedState extends State<Featured> {
 
   @override
   Widget build(BuildContext context) {
-    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
-    
-    
-    
-    
+    final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context); // to access place data
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
     return Column(
       children: <Widget>[
         Container(
@@ -72,7 +69,7 @@ class _FeaturedState extends State<Featured> {
             scrollDirection: Axis.horizontal,
             itemCount: placesBloc.allData.length,
 
-            //pageSnapping: false,
+            
 
             onPageChanged: (index) {
               setState(() {
@@ -217,9 +214,11 @@ class _FeaturedState extends State<Featured> {
             },
           ),
         ),
+
+        
         DotsIndicator(
           dotsCount: 5,
-          position: listIndex,
+          position: listIndex.toDouble(),                                       // showing dots animation
           decorator: DotsDecorator(
             size: const Size.square(8.0),
             activeSize: const Size(16.0, 8.0),

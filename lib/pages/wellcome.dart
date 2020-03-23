@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_hour/pages/intro.dart';
+import 'package:talio_travel/pages/intro.dart';
+import 'package:talio_travel/Api/api_provider.dart';
+import 'package:talio_travel/Api/api_list.dart';
+
+// welcome page 
 
 
 class WellComePage extends StatefulWidget {
@@ -23,10 +26,10 @@ class _WellComePageState extends State<WellComePage> {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googlSignIn = new GoogleSignIn();
-  String name, email, profilePic, uid, phone, joiningDate;
+  String name, email, profilePic, uid, phone, joiningDate, accessToken;
 
 
-  
+  // sign in procedure
   Future<FirebaseUser> _signIn() async {
     final GoogleSignInAccount googleUser = await _googlSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -36,7 +39,7 @@ class _WellComePageState extends State<WellComePage> {
       idToken: googleAuth.idToken,
     );
 
-    FirebaseUser userDetails = (await _firebaseAuth.signInWithCredential(credential)).user;
+    FirebaseUser userDetails = (await _firebaseAuth.signInWithCredential(credential)).user;  // getting data from google 
 
     var userName = userDetails.displayName;
     var userEmail = userDetails.email;
@@ -45,7 +48,7 @@ class _WellComePageState extends State<WellComePage> {
     var phoneNumber = userDetails.phoneNumber;
     
 
-    print(uid);
+    //print("UserID:" + uid);
     setState(() {
       this.name = userName;
       this.email = userEmail;
@@ -55,59 +58,50 @@ class _WellComePageState extends State<WellComePage> {
       
     });
 
-    
-    _checkExistingUser();
+    _saveToDb();
 
     return userDetails;
   }
 
-  _checkExistingUser() async {
-    DatabaseReference reference = FirebaseDatabase.instance.reference();
-    reference.child('Users').once().then((DataSnapshot snap) {
-      List keys = snap.value.keys.toList();
-
-      if (keys.contains(uid)) {
-        print('User Already Exists');
-      } else {
-        _getJoiningDate();
-        _saveToFirebase();
-        print('User does not Exist');
-      }
-    });
-  }
-
-  Future _saveToFirebase() async {
-    DatabaseReference reference = FirebaseDatabase.instance.reference();
-    reference.child('Users/$uid').set({
+  //saving new user data to the firebase realtime database
+  Future _saveToDb() async {
+    var data = {
       'name': name,
       'email': email,
-      'uid': uid,
       'phone': phone,
-      'profile pic url': profilePic,
-      'joining date': joiningDate
-    });
+      'profile_pic_url': profilePic,
+      'provider' : 'google',
+      'provider_user_id' : uid
+    };
+
+    var res = await Network().authData(data, APIList.socialAuthAPI);
+    print(res.body);
+    var body = json.decode(res.body);
+
+    if(res.statusCode == APIList.statusCodeOK) {
+      print("Status 200");
+      accessToken = body['access_token'];
+      print("TTTTT:$accessToken");
+    }
   }
 
-  _getJoiningDate (){
-    DateTime now = DateTime.now();
-    String _date = DateFormat('dd-MM-yyyy').format(now);
-    setState(() {
-      joiningDate = _date;
-    });
-    print(joiningDate);
-  }
-
-  Future _saveData() async {
+  // saving user data in shared preferences for further offline uses.
+  Future _saveDataToSP() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    await sharedPreferences.setString('userName', name);
+    print("Saving Token: $accessToken");
+
+    await sharedPreferences.setString('name', name);
     await sharedPreferences.setString('userEmail', email);
     await sharedPreferences.setString('userProfilePic', profilePic);
     await sharedPreferences.setString('uid', uid);
+    await sharedPreferences.setString('accessToken', accessToken);
   }
 
-   
-   
+
+
+
+  // when signin is comppleted  
    afterSuccess(){
    var duration = Duration(milliseconds: 3000);
    return Timer(duration, nextPage);
@@ -119,6 +113,8 @@ class _WellComePageState extends State<WellComePage> {
     ));
   }
 
+
+  // setting page for wellcome screen will appear or not when the user open this app for the secound time
   _setPage() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setInt('x', 1);
@@ -135,6 +131,9 @@ class _WellComePageState extends State<WellComePage> {
         successUI());
   }
 
+
+
+  // loading animation ui
   Widget loadingUI() {
     return Center(
       child: Column(
@@ -170,6 +169,7 @@ class _WellComePageState extends State<WellComePage> {
     );
   }
 
+  // wellcome page
   Widget welcomeUI() {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
@@ -247,11 +247,13 @@ class _WellComePageState extends State<WellComePage> {
                     
                   });
                   _signIn().then((f){
-                    _saveData().whenComplete((){
-                      setState(() {
-                        uI1 = 1;
+                    _saveToDb().whenComplete((){
+                      _saveDataToSP().whenComplete((){
+                        setState(() {
+                        uI1 = 1; // to show success ui
                         afterSuccess();
                         _setPage();
+                        });
                       });
                     });
                   });
@@ -266,6 +268,7 @@ class _WellComePageState extends State<WellComePage> {
     );
   }
 
+  // success animation
   Widget successUI  (){
     return Center(
         child: Container(
@@ -277,11 +280,7 @@ class _WellComePageState extends State<WellComePage> {
               //color: Colors.deepPurpleAccent,
               alignment: Alignment.center,
               fit: BoxFit.contain,
-
-            
-            
-            
-            ),
+    ),
         ),
         
       

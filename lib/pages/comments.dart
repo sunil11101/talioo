@@ -11,8 +11,8 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
-  var formKey = GlobalKey<FormState>();
-  var textFieldCtrl = TextEditingController();
+  var formKey = GlobalKey<FormState>();   //getting global key for textfield
+  var textFieldCtrl = TextEditingController();   // text editing controller
   List userNames = [
     'Default User',
     
@@ -25,6 +25,8 @@ class _CommentsPageState extends State<CommentsPage> {
   String timeNow;
   String name, picture;
 
+
+  // getting cureent date & time
    _getTime (){
     DateTime now = DateTime.now();
     String _date = DateFormat('dd-MM-yy  hh:mm a').format(now);
@@ -34,6 +36,8 @@ class _CommentsPageState extends State<CommentsPage> {
     print(timeNow);
   }
 
+
+    // getting user data from shared preferances
     Future _getUserDetailsfromSP() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var _name = sharedPreferences.getString('userName') ?? 'name';
@@ -145,40 +149,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     )
                     
                     
-                    // ListTile(
-                    //   leading: Container(
-                    //     height: 50,
-                    //     width: 50,
-                    //     decoration: BoxDecoration(
-                    //         // border: Border.all(
-                    //         //   color: Colors.grey[700],
-                    //         //   width: 0.1
-                    //         // ),
-                    //         color: Colors.grey[300],
-                    //         shape: BoxShape.circle,
-                    //         image: DecorationImage(
-                    //             image:
-                    //                 CachedNetworkImageProvider(images[index]),
-                    //             fit: BoxFit.cover)),
-                    //   ),
-                    //   title: Text(
-                    //     userNames[index],
-                    //     style: TextStyle(
-                    //         fontSize: 12, fontWeight: FontWeight.w600),
-                    //   ),
-                    //   subtitle: Text(
-                    //     comments[index],
-                    //     style: TextStyle(
-                    //         fontSize: 16, fontWeight: FontWeight.w500),
-                    //   ),
-                    //   trailing: Column(
-                    //     children: <Widget>[
-                    //       Text(timeNow, style: TextStyle(
-                    //         fontSize: 11
-                    //       ),)
-                    //     ],
-                    //   ),
-                    // ),
+                    
                   );
                 },
               ),
@@ -236,11 +207,13 @@ class _CommentsPageState extends State<CommentsPage> {
     ));
   }
 
+
+  // after send button clicked it will check the textfield or not and then save the data to the cuttent state 
   void sendClicked() {
     if (formKey.currentState.validate()) {
-      formKey.currentState.save();
-      textFieldCtrl.clear();
-      FocusScope.of(context).unfocus();
+      formKey.currentState.save(); //saving the data 
+      textFieldCtrl.clear();   // clearing textfield for new comment
+      FocusScope.of(context).unfocus();  // hiding the keyboard
     }
   }
 }

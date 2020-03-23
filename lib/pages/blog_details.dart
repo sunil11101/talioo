@@ -4,11 +4,13 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
-import 'package:travel_hour/blocs/blog_bloc.dart';
+import 'package:talio_travel/blocs/blog_bloc.dart';
 
 
 
 class BlogDetailsPage extends StatelessWidget {
+
+  //geting data from blog page for selected item
   final String blogTitle,
       blogSubtitle,
       blogSource,
@@ -37,13 +39,9 @@ class BlogDetailsPage extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    final BlogBloc blogBloc = Provider.of<BlogBloc>(context);
-    // Provider.of<BlogBloc>(context, listen: false).loveIconCheck(blogTitle);
-    // Provider.of<BlogBloc>(context, listen: false).bookmarkIconCheck(blogTitle);
-
-    
+    final BlogBloc blogBloc = Provider.of<BlogBloc>(context);  //to access blog data
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
 
     
     return Scaffold(

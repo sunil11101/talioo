@@ -1,3 +1,5 @@
+// all data for hotels page
+
 
 class Hotel {
   String name; 

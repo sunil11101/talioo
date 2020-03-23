@@ -1,65 +1,57 @@
 {
   "project_info": {
-    "project_number": "674264708413",
-    "firebase_url": "https://travel-hour.firebaseio.com",
-    "project_id": "travel-hour",
-    "storage_bucket": "travel-hour.appspot.com"
+    "project_number": "466179368321",
+    "firebase_url": "https://travelapp-1582808009557.firebaseio.com",
+    "project_id": "travelapp-1582808009557",
+    "storage_bucket": "travelapp-1582808009557.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:674264708413:android:dc226121f5678d9b",
+        "mobilesdk_app_id": "1:466179368321:android:18205a5092d9e8c943f480",
         "android_client_info": {
-          "package_name": "com.mrblab.travel_hour"
+          "package_name": "com.talio.travel_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "674264708413-p35i0plhmkue6d904hjq8596fr7rlu35.apps.googleusercontent.com",
+          "client_id": "466179368321-7jgsuhd90j8in9atd9vblm7vsvrpaogp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mrblab.travel_hour",
-            "certificate_hash": "c34020430dc40eb21ada479e32b4d8567d59f6ac"
+            "package_name": "com.talio.travel_app",
+            "certificate_hash": "3515da41aab91d5d4a675b03dc5cfd8b8c9877c2"
           }
         },
         {
-          "client_id": "674264708413-v3idufdum1uat1pg68fkgmjd21ptrjif.apps.googleusercontent.com",
+          "client_id": "466179368321-j0i0ircvm54fhcejp31ni8av5tap0lfq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mrblab.travel_hour",
-            "certificate_hash": "7c9ad081705837fd97c7090a05893477099951ca"
+            "package_name": "com.talio.travel_app",
+            "certificate_hash": "ea353074614b8d8ccf97e7ac5a67cbb28aa14fd7"
           }
         },
         {
-          "client_id": "674264708413-c33uverghv2thism19fc2umo23kgr47i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mrblab.travel_hour",
-            "certificate_hash": "cb8e5d2a8862b077b36ca8d450115c793e1b767a"
-          }
-        },
-        {
-          "client_id": "674264708413-mfs9i0aaarqgsj9hhht1godete2dlt6e.apps.googleusercontent.com",
+          "client_id": "466179368321-peu6lmvf5rcp6enjibb2sf5trtvehlgo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCRiEBFybLUjYHyzGzRePd_VzBzv5d435o"
+          "current_key": "AIzaSyC2_DPu7osDSw7nI0aI2iCasLA41DyA0f4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "674264708413-mfs9i0aaarqgsj9hhht1godete2dlt6e.apps.googleusercontent.com",
+              "client_id": "466179368321-peu6lmvf5rcp6enjibb2sf5trtvehlgo.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "674264708413-gr90kclpb3f27s8nsb01g77m8i39ue7s.apps.googleusercontent.com",
+              "client_id": "466179368321-f2n9lp3or6ero5jl9ptnu702vc5h01gq.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mrblab.travelhour"
+                "bundle_id": "com.talio.travelapp"
               }
             }
           ]

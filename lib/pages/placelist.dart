@@ -5,20 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
 
-import 'package:travel_hour/pages/details.dart';
-import 'package:travel_hour/models/variables.dart';
+import 'package:talio_travel/pages/details.dart';
+import 'package:talio_travel/models/variables.dart';
+
+
+// placeList of particular places
 
 
 class PlaceListPage extends StatelessWidget {
-  final String title;
+  final String title;  
   
   
   PlaceListPage({Key key, @required this.title}) : super(key: key);
 
 
-
+  // this is callback function and using cached image for saving online images
   Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
       imageUrl: placesBloc.allData[index].image,
@@ -55,7 +58,7 @@ class PlaceListPage extends StatelessWidget {
 
 
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       backgroundColor: Colors.grey[150],
       appBar: AppBar(
@@ -66,11 +69,9 @@ class PlaceListPage extends StatelessWidget {
         elevation: 0,
         
         
-        // actions: <Widget>[
-        //   IconButton(icon: Icon(LineIcons.sort), onPressed: () {},)
-        // ],
+        
       ),
-      body:  AnimationLimiter(
+      body:  AnimationLimiter(               // used for listview animation
               child: ListView.builder(
           itemCount: placesBloc.allData.length,
           itemBuilder: (BuildContext context, int index) {
@@ -178,7 +179,7 @@ class PlaceListPage extends StatelessWidget {
                 ],
               ),
 
-              onTap: (){
+            onTap: (){
             placesBloc.viewsIncrement(index);
             placesBloc.loveIconCheck(placesBloc.allData[index].name);
             placesBloc.bookmarkIconCheck(placesBloc.allData[index].name);

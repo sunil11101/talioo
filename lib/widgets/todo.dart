@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:travel_hour/pages/comments.dart';
-import 'package:travel_hour/pages/guide.dart';
-import 'package:travel_hour/pages/hotel.dart';
-import 'package:travel_hour/pages/restaurant.dart';
+import 'package:talio_travel/pages/comments.dart';
+import 'package:talio_travel/pages/guide.dart';
+import 'package:talio_travel/pages/hotel.dart';
+import 'package:talio_travel/pages/restaurant.dart';
+
+
+// used in place details page
 
 class TodoWidgets extends StatelessWidget {
   const TodoWidgets({
@@ -250,6 +253,7 @@ class TodoWidgets extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
+                    // shoing popup page
                     showModalBottomSheet(
                         elevation: 0,
                         isScrollControlled: true,

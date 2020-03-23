@@ -1,4 +1,4 @@
-
+//icons data
 
 import 'package:flutter/material.dart';
 
@@ -31,3 +31,16 @@ class BookmarkIcon {
     color: Colors.grey[700],
   );
 }
+
+class CategoryIcon {
+  IconData categoryIcon;
+  bool isSelected;
+  CategoryIcon(this.categoryIcon, this.isSelected);
+}
+
+List<CategoryIcon> categoryIcons = [
+  CategoryIcon(Icons.flight, false),
+  CategoryIcon(Icons.directions_car, true),
+  CategoryIcon(Icons.panorama, false),
+  CategoryIcon(Icons.motorcycle, false),
+];

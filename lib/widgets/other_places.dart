@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
+
+// used in place details page
 
 
-import 'package:travel_hour/pages/details.dart';
+import 'package:talio_travel/pages/details.dart';
 
 class OtherPlaces extends StatelessWidget {
   const OtherPlaces({
@@ -14,6 +16,8 @@ class OtherPlaces extends StatelessWidget {
   }) : super(key: key);
 
   final double w;
+
+  // this is callback function and using cached image for saving online images  
   Widget cachedImage(index, placesBloc) {
     return CachedNetworkImage(
       imageUrl: placesBloc.allData[index].image,
@@ -45,10 +49,10 @@ class OtherPlaces extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
-    //placesBloc.allData.isEmpty? placesBloc.getData(): print('null') ;
+    
     
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
 
 
     

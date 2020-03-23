@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'package:travel_hour/models/icons.dart';
+import 'package:talio_travel/models/icons.dart';
 
-import 'package:travel_hour/models/places_data.dart';
+import 'package:talio_travel/models/places_data.dart';
 
 class PlacesBloc extends ChangeNotifier {
   
@@ -16,6 +16,9 @@ class PlacesBloc extends ChangeNotifier {
   List<String> _placeList = [];
   List<int> _placeListInt = [];
   List<PlaceData1> _filteredData = [];
+
+
+  //all procedures same as blog_bloc.dart
 
   PlacesBloc() {
     getData();

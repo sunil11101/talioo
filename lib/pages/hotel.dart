@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:http/http.dart' as http;
-import 'package:travel_hour/models/hotel.dart';
+import 'package:talio_travel/models/hotel.dart';
+
+
+// nearby hotes page
 
 class HotelPage extends StatefulWidget {
   HotelPage({Key key}) : super(key: key);
@@ -13,12 +16,16 @@ class HotelPage extends StatefulWidget {
 }
 
 class _HotelPageState extends State<HotelPage> {
-  GoogleMapController _controller;
+
+  GoogleMapController _controller; 
   List<Hotel> _alldata = [];
   PageController _pageController;
   int prevPage;
   List _markers = [];
 
+
+
+  // getting data from google places api to via http saving data to the data model
   void getData() async {
     http.Response response = await http.get(
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json' +
@@ -43,12 +50,14 @@ class _HotelPageState extends State<HotelPage> {
             decodedData['results'][i]['price_level'] ?? 0);
 
         _alldata.add(d);
-        _alldata.sort((a, b) => b.rating.compareTo(a.rating));
+        _alldata.sort((a, b) => b.rating.compareTo(a.rating));   // sorting data by hight ratings
       }
-      _addMarker();
+      _addMarker();        //adding marker from data dynamically
     }
   }
 
+
+  // adding marker 
   _addMarker() {
     for (var data in _alldata) {
       setState(() {
@@ -61,6 +70,8 @@ class _HotelPageState extends State<HotelPage> {
     }
   }
 
+
+  // pageview controller for animation purposes
   void _onScroll() {
     if (_pageController.page.toInt() != prevPage) {
       prevPage = _pageController.page.toInt();
@@ -76,6 +87,8 @@ class _HotelPageState extends State<HotelPage> {
     super.initState();
   }
 
+
+  // building a list of hotel from api data
   _hotelList(index) {
     return AnimatedBuilder(
       animation: _pageController,
@@ -173,6 +186,8 @@ class _HotelPageState extends State<HotelPage> {
     );
   }
 
+
+  // after tapping any list item
   _onCardTap(index) {
     showDialog(
         context: context,
@@ -382,15 +397,17 @@ class _HotelPageState extends State<HotelPage> {
     ));
   }
 
+
   void mapCreated(controller) {
     setState(() {
       _controller = controller;
     });
   }
 
+  // show aniomation and go to the particular location when list item scrolls
   moveCamera() {
     _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(_alldata[_pageController.page.toInt()].lat,
+        target: LatLng(_alldata[_pageController.page.toInt()].lat,         //[_pageController.page.toInt()] == [index]
             _alldata[_pageController.page.toInt()].lng),
         zoom: 18,
         bearing: 45.0,

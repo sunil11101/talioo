@@ -1,5 +1,5 @@
 
-
+// all data for restaurant page
 class Restaurant {
   String name;
   String address;

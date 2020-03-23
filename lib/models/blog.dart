@@ -1,5 +1,7 @@
 
 
+//all blog data
+
 class BlogData1 {
   String title;
   String details;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'package:travel_hour/models/blog.dart';
-import 'package:travel_hour/models/icons.dart';
+import 'package:talio_travel/models/blog.dart';
+import 'package:talio_travel/models/icons.dart';
 
 
 
@@ -24,10 +24,10 @@ class BlogBloc extends ChangeNotifier{
   List<String> _blogList = [];
   List<int> _blogListInt = [];
 
-
+  
   BlogBloc(){
-    getData();
-    getBookmarkedBlogList();
+    getData();   //organizing data when the app intializes.
+    getBookmarkedBlogList();    //getting bookmarked blog list(if any)
   }
 
 
@@ -68,6 +68,7 @@ class BlogBloc extends ChangeNotifier{
   List get blogListInt => _blogListInt;
 
 
+  //organizing data when the app intializes.
   getData() {
     _allData.clear();
     for (var i = 0; i < blogData.blogTitle.length; i++) {
@@ -87,6 +88,8 @@ class BlogBloc extends ChangeNotifier{
     afterPopSelection(_popSelection);
   }
 
+
+  // In the blogPage getting popup menu selection
   afterPopSelection (value){
     _popSelection = value;
     _popSelection == 'view'?
@@ -101,13 +104,15 @@ class BlogBloc extends ChangeNotifier{
 
 
 
-
+  // Increment of the page view of the particular blog post
   viewsIncrement (index){
     _allData[index].views++;
     notifyListeners();
     
   }
 
+
+  // checking user loved particular blog or not
   loveIconCheck (blogTitle)async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String uid = sp.get('uid') ?? 'uid';
@@ -123,6 +128,7 @@ class BlogBloc extends ChangeNotifier{
     
   }
 
+  //after clicking love icon 
   loveIconClicked (blogindex,blogTitle)async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String uid = sp.getString('uid') ?? 'uid';
@@ -141,6 +147,7 @@ class BlogBloc extends ChangeNotifier{
     notifyListeners();
   }
 
+  //// checking user saved/bookmarked particular blog or not
   bookmarkIconCheck (blogTitle) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String uid = sp.getString('uid') ?? 'uid';
@@ -158,6 +165,9 @@ class BlogBloc extends ChangeNotifier{
     
   }
 
+
+  //after clicking Bookmark icon 
+  
   bookmarkIconClicked (index, blogTitle, context) async {
 
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -184,6 +194,7 @@ class BlogBloc extends ChangeNotifier{
     notifyListeners();
   }
 
+  //getting bookmarked blog list(if any)
   getBookmarkedBlogList ()async {
     
     SharedPreferences sp = await SharedPreferences.getInstance();

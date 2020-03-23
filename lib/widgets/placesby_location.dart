@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:travel_hour/pages/placelist.dart';
+import 'package:talio_travel/pages/placelist.dart';
+
+
+// used in home page
 
 Widget placesBylocation(w) {
   

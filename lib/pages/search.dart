@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
 
-import 'package:travel_hour/pages/details.dart';
+
+// search page
+
+import 'package:talio_travel/pages/details.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -15,14 +18,14 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   
   String txt = 'SUGGESTED PLACES';
-  var formKey = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();  // getting global key for textfield
   var textFieldCtrl = TextEditingController();
 
 
   
 
   
-
+  // building suggestion list
   Widget beforeSearchUI(placesBloc) {
     return Expanded(
         child: GridView.count(
@@ -141,6 +144,8 @@ class _SearchPageState extends State<SearchPage> {
     ));
   }
 
+
+  // building a list of search item
   Widget afterSearchUI(placesBloc) {
     return Expanded(
       child: GridView.count(
@@ -364,7 +369,7 @@ class _SearchPageState extends State<SearchPage> {
 
           
           //afterSearchUI()
-          placesBloc.filteredData.isEmpty ? beforeSearchUI(placesBloc) : afterSearchUI(placesBloc)
+          placesBloc.filteredData.isEmpty ? beforeSearchUI(placesBloc) : afterSearchUI(placesBloc)    //choosing which page appear first
         ],
       ),
     );

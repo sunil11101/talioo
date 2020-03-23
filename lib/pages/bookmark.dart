@@ -1,24 +1,19 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-
-import 'package:travel_hour/blocs/blog_bloc.dart';
-import 'package:travel_hour/blocs/places_bloc.dart';
-
-import 'package:travel_hour/models/blog.dart';
-import 'package:travel_hour/models/places_data.dart';
-
-import 'package:travel_hour/pages/details.dart';
-import 'package:travel_hour/pages/blog_details.dart';
-
-import 'package:travel_hour/models/variables.dart';
+import 'package:talio_travel/blocs/blog_bloc.dart';
+import 'package:talio_travel/blocs/places_bloc.dart';
+import 'package:talio_travel/models/blog.dart';
+import 'package:talio_travel/models/places_data.dart';
+import 'package:talio_travel/pages/details.dart';
+import 'package:talio_travel/pages/blog_details.dart';
+import 'package:talio_travel/models/variables.dart';
 
 
-
+// bookmark page for both places and blogs
 
 
 class BookmarkPage extends StatefulWidget {
@@ -34,21 +29,16 @@ class _BookmarkPageState extends State<BookmarkPage> {
   @override
   void initState() { 
     super.initState();
-    BlogBloc().getBookmarkedBlogList();
-    PlacesBloc().getBookmarkedPlaceList();
+    BlogBloc().getBookmarkedBlogList(); //getting bookmarked blog list(if any)
+    PlacesBloc().getBookmarkedPlaceList(); //getting bookmarked place list(if any)
   }
 
 
   @override
   Widget build(BuildContext context) {
-
-
-    
-
     final BlogBloc blogBloc = Provider.of<BlogBloc>(context);
     final PlacesBloc placesBloc = Provider.of<PlacesBloc>(context);
-    // Provider.of<BlogBloc>(context, listen: false).getBookmarkedBlogList();
-    // Provider.of<PlacesBloc>(context, listen: false).getBookmarkedPlaceList();
+    
 
     
 
@@ -91,7 +81,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
         ),
         body: TabBarView(
           children: <Widget>[
-            placesBloc.placeListInt.isEmpty ? _emptyUI(w,h) : _placeUI(w,h, context, placesBloc),
+            //checking bookmarked place list is empty or not. if empty > navigate to empty page, else navigate to list page
+            placesBloc.placeListInt.isEmpty ? _emptyUI(w,h) : _placeUI(w,h, context, placesBloc),   
             blogBloc.blogListInt.isEmpty ? _emptyUI(w,h) : _blogUI(w,h, context, blogBloc),
           ],
         ),
@@ -99,6 +90,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
     );
   }
 
+
+  // empty page will show when bookmarked list is empty
   Widget _emptyUI(w,h) {
     return Container(
       
@@ -126,10 +119,11 @@ class _BookmarkPageState extends State<BookmarkPage> {
     );
   }
 
+  // bookmarked bloglist page
   Widget _blogUI(w,h, context, blogBloc) {
     BlogData blogData = BlogData();
     
-    //final BlogBloc blogBloc = Provider.of<BlogBloc>(context);
+    
     
     
     return Scaffold(
@@ -226,7 +220,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => BlogDetailsPage(
-                              blogTitle: blogData.blogTitle[blogBloc.blogListInt[index]],
+                              blogTitle: blogData.blogTitle[blogBloc.blogListInt[index]],     // blogBloc.blogListInt[index] == index of the selected item for all
                               blogImage: blogData.blogImage[blogBloc.blogListInt[index]],
                               blogSubtitle:
                                   blogData.blogDetails[blogBloc.blogListInt[index]],
@@ -246,6 +240,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     );
   }
 
+  // bookmarked placelist page
   Widget _placeUI(w,h, context, placesBloc) {
     
     PlaceData placeData = PlaceData();
@@ -253,7 +248,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     
 
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
 
     Widget cachedImage(index) {
       return CachedNetworkImage(
@@ -415,7 +410,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                         placeName: placeData.placeName[placesBloc.placeListInt[index]],   
                                         placeLocation: placeData.location[placesBloc.placeListInt[index]],
                                         loves: placeData.loves[placesBloc.placeListInt[index]],
-                                        views: placeData.views[placesBloc.placeListInt[index]],
+                                        views: placeData.views[placesBloc.placeListInt[index]],                      // placesBloc.placeListInt[index] == index of selected item
                                         comments: placeData.comments[placesBloc.placeListInt[index]],
                                         picturesList: placeData.imageList[placesBloc.placeListInt[index]],
                                         placeDetails: placeData.placeDeatails[placesBloc.placeListInt[index]],

@@ -1,3 +1,6 @@
+
+//all places data
+
 class PlaceData1 {
   String image;
   String name;
@@ -22,10 +25,10 @@ class PlaceData {
   ];
 
   List placeName = [
-    'Bichanakadi',
-    'Ratargul Swamp Forest',
-    "St. Martin's Island",
-    'Madhabkunda Waterfall',
+    'Followings',
+    'Hot Bloggers',
+    "HK",
+    'SG',
     'Jaflong',
   ];
 

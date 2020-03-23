@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:http/http.dart' as http;
-import 'package:travel_hour/models/restaurant.dart';
+import 'package:talio_travel/models/restaurant.dart';
+
+
+// similliar as hotel page >> see hotels page comments
 
 class RestaurantPage extends StatefulWidget {
   RestaurantPage({Key key}) : super(key: key);

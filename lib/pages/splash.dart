@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_hour/pages/wellcome.dart';
-import 'package:travel_hour/widgets/navbar.dart';
+import 'package:talio_travel/pages/wellcome.dart';
+import 'package:talio_travel/widgets/navbar.dart';
+
+
+// launcher page > a simple rotation animation
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -15,12 +18,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin{
   AnimationController _controller;
 
 
-
+  // when animation is completed
   afterSplash() {
     var duration = Duration(milliseconds: 2000);
     return Timer(duration, nextPage);
   }
 
+
+  // choosing which page to go
   void nextPage() {
     Navigator.push(
         context,

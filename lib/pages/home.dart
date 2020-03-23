@@ -1,23 +1,20 @@
 
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talio_travel/models/places_data.dart';
+import 'package:talio_travel/models/icons.dart';
+import 'package:talio_travel/pages/placelist.dart';
+import 'package:talio_travel/pages/search.dart';
+import 'package:talio_travel/widgets/featured_places.dart';
+import 'package:talio_travel/widgets/places_near_you.dart';
+import 'package:talio_travel/widgets/placesby_location.dart';
+import 'package:talio_travel/widgets/popular_places.dart';
 
 
-import 'package:travel_hour/models/places_data.dart';
-
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:travel_hour/pages/account.dart';
-import 'package:travel_hour/pages/placelist.dart';
-import 'package:travel_hour/pages/search.dart';
-import 'package:travel_hour/widgets/featured_places.dart';
-import 'package:travel_hour/widgets/places_near_you.dart';
-import 'package:travel_hour/widgets/placesby_location.dart';
-import 'package:travel_hour/widgets/popular_places.dart';
+//home page
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -29,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   
 
 
-  PlaceData placeData = PlaceData();
+  PlaceData placeData = PlaceData(); // to acces place data class
   
   String userName, userEmail;
 
@@ -37,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   int listIndex = 0;
   
 
+  // getting user data from shared preferances
   Future _getUserDetailsfromSP() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var name = sharedPreferences.getString('userName') ?? 'name';
@@ -57,6 +55,39 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Widget categoryBar(w) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 5),
+        child: Container(
+          height: 40,
+          width: w,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categoryIcons.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                  width: 100,
+                  child: InkWell(
+                    child: Stack(
+                      children: <Widget>[
+                        Icon(
+                            categoryIcons[index].categoryIcon,
+                            color: Colors.blue,
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+
+                    },
+                  ),
+              );
+            },
+          ),
+        ),
+    );
+  }
+
+
   Widget searchBar(w) {
     return Padding(
       padding: const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 5),
@@ -67,8 +98,8 @@ class _HomePageState extends State<HomePage> {
           width: w,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.grey[400], width: 0.5),
-            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Theme.of(context).primaryColor, width: 3),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
             padding: const EdgeInsets.all(10),
@@ -78,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   width: 20,
                 ),
-                Text('Search Places & Explore'),
+                Text('Search, where will you go?'),
               ],
             ),
           ),
@@ -95,9 +126,14 @@ class _HomePageState extends State<HomePage> {
     return Padding(
         padding:
             Platform.isAndroid ? 
-            const EdgeInsets.only(top: 50, left: 20, right: 15, bottom: 18)
-            : const EdgeInsets.only(top: 70, left: 20, right: 10, bottom: 20),
-        child: SizedBox(
+            const EdgeInsets.only(top: 50, left: 50, right: 50, bottom: 18)
+            : const EdgeInsets.only(top: 70, left: 50, right: 45, bottom: 20),
+        child: Image(
+          image: AssetImage('assets/images/talio_logo.jpg'),
+          fit: BoxFit.contain,
+        ),
+
+        /*child: SizedBox(
           height: 55,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              Spacer(),
+              /*Spacer(),
               InkWell(
                 child: userProfilePic.isEmpty
                     ? Container(
@@ -159,10 +195,11 @@ class _HomePageState extends State<HomePage> {
                         return AccountPage();
                       });
                 },
-              )
+              )*/
             ],
           ),
-        ));
+        )*/
+    );
   }
 
   
@@ -172,19 +209,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    //double h = MediaQuery.of(context).size.height;
+    
 
     return Scaffold(
-        //backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-      child: Column(
+      
+      body: SingleChildScrollView(
+      child:Column (
           children: <Widget>[
               header(w),
               searchBar(w),
               SizedBox(
                 height: 10,
               ),
-              Featured(),
+              categoryBar(w),
+              Featured(),   // featured widget
               
               Padding(
                 padding: const EdgeInsets.only(left: 15, top: 10, bottom: 15,right: 15),
@@ -220,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              PopularPlaces(),
+              PopularPlaces(),    // popular places widget
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Container(
@@ -254,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              PlacesNearYou(),
+              PlacesNearYou(),   //places near you widget
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Container(
@@ -274,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              placesBylocation(w),
+              placesBylocation(w),   // places by location widget
             ],
           
         ),
