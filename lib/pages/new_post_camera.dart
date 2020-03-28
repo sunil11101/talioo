@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lamp/lamp.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:talio_travel/models/img_files.dart';
 import 'package:talio_travel/models/post.dart';
 import 'package:talio_travel/pages/new_post_image_preview.dart';
+import 'package:talio_travel/utils/flutter_native_image.dart';
+
 
 import '../global.dart';
 import 'new_post_video_preview.dart';
@@ -292,7 +294,8 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
                             }else {
                               _takePicture().then((String imageTakenPath) async{
                                 print('Picture saved to $imageTakenPath');
-                                widget.post.imageTakenPath = imageTakenPath;
+                                //File f = await FlutterNativeImage.adjustBrightness(imageTakenPath, 100);
+                                widget.post.imagesFileList.add(ImgFile(null, File(imageTakenPath), imageTakenPath)) ;
                                 _pushToNewPostInfo();
                               });
                             }
@@ -554,18 +557,5 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
             NewPostImagePreviewPage(post: widget.post)
       ),
     );
-  }
-
-  Future<String> _resizePhoto(String filePath) async {
-    ImageProperties properties =
-    await FlutterNativeImage.getImageProperties(filePath);
-
-    int width = properties.width;
-    var offset = (properties.height - properties.width) / 2;
-
-    File croppedFile = await FlutterNativeImage.cropImage(
-        filePath, 0, offset.round(), width, width);
-
-    return croppedFile.path;
   }
 }

@@ -2,15 +2,14 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:talio_travel/models/img_bytes.dart';
-import 'package:image/image.dart' as Img;
-import 'package:bitmap/bitmap.dart';
+import 'package:talio_travel/models/img_files.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:talio_travel/utils/flutter_native_image.dart';
 
 class Post {
   List<Asset> imagesPickedList = List<Asset>();
-  List<ImgByte> imagesBytesList = List<ImgByte>();
+  List<ImgFile> imagesFileList = List<ImgFile>();
   //Map<String, Color> imagesFilterMap = HashMap<String, Color>();
   File mainVideo = null;
   String videoAspect;
@@ -29,38 +28,38 @@ class Post {
       print("PRINT" + i.toString());
       bool sameImage = false;
 
-      for(int i=0; i< imagesPickedList.length; i++){
-        if(imagesPickedList[i].identifier != imagesPickedList[i].identifier) {
+      for(int j=0; j< imagesFileList.length; j++){
+        if(imagesFileList[j].identifier == imagesPickedList[i].identifier) {
           sameImage = true;
           break;
         }
       }
 
       if(!sameImage) {
-        ByteData imageByteData = await imagesPickedList[i].getByteData(quality: 100);
-        ByteBuffer byteBuffer = imageByteData.buffer;
-        print("AA");
-        Uint8List imageUint8List = byteBuffer.asUint8List(imageByteData.offsetInBytes, imageByteData.lengthInBytes);
+        var imagePath = await FlutterAbsolutePath.getAbsolutePath(imagesPickedList[i].identifier);
+        File imageFile = File(imagePath);
+        //ByteData imageByteData = await imagesPickedList[i].getByteData(quality: 100);
+        //ByteBuffer byteBuffer = imageByteData.buffer;
+        //print("AA");
+        //Uint8List imageUint8List = byteBuffer.asUint8List(imageByteData.offsetInBytes, imageByteData.lengthInBytes);
 
         //print("WIDTH" + imagesPickedList[i].originalWidth.toString());
         //Bitmap bitM = await Bitmap.fromHeadful(imagesPickedList[i].originalWidth, imagesPickedList[i].originalHeight, imageUint8List);
         //bitM.buildHeaded();
         //imagesBytesList.add(ImgByte(imagesPickedList[i].identifier, bitM));
-        print("BB");
-        Img.Image imgToAdjust = Img.decodeImage(imageUint8List);
-        print("CC");
+
+        //Img.Image imgToAdjust = Img.decodeImage(imageUint8List);
+
         //ReceivePort receivePort = new ReceivePort();
         //await Isolate.spawn(decode, new DecodeParam(imageUint8List, receivePort.sendPort));
         //Img.Image imgToAdjust = await receivePort.first;
-        imagesBytesList.add(ImgByte(imagesPickedList[i].identifier, imgToAdjust));
+        //File f = await FlutterNativeImage.adjustBrightness(imagePath, 100);
+        imagesFileList.add(ImgFile(imagesPickedList[i].identifier, File(imagePath), imagePath));
+        //imagesFileList.add(ImgByte(imagesPickedList[i].identifier, imageFile, imagePath));
       }
     }
   }
 
-  static void decode(DecodeParam param) {
-    Img.Image image = Img.decodeImage(param.file);
-    param.sendPort.send(image);
-  }
 /*
   List<Asset> getImagesPickedList(){
     return imagesPickedList;
@@ -116,10 +115,4 @@ class Post {
   }
 
  */
-}
-
-class DecodeParam {
-  final Uint8List file;
-  final SendPort sendPort;
-  DecodeParam(this.file, this.sendPort);
 }

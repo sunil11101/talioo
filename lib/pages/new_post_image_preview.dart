@@ -7,10 +7,10 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:talio_travel/global.dart';
-import 'package:talio_travel/models/img_bytes.dart';
+import 'package:talio_travel/models/img_files.dart';
 import 'package:talio_travel/models/post.dart';
 import 'package:talio_travel/widgets/circle_icon.dart';
-import 'package:image/image.dart' as Img;
+import 'package:talio_travel/utils/flutter_native_image.dart';
 
 import 'new_post_info.dart';
 
@@ -25,7 +25,7 @@ class NewPostImagePreviewPage extends StatefulWidget{
 }
 
 class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with SingleTickerProviderStateMixin {
-  //StreamController<Uint8List> picutreStream;
+  ImageRefresher _imageRefresher;
   TabController _tabController;
   int listIndex = 0;
   String imageAspectRatio = PostConfig.cameraAspectRatio[1];
@@ -33,12 +33,18 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
   @override
   void initState() {
     super.initState();
-    //picutreStream = new StreamController<Uint8List>();
+    _imageRefresher = ImageRefresher(imageFile: widget.post.imagesFileList[0].imageFile);
 
     _tabController = TabController(
       length: widget.tabName.length,
       vsync: this,
     );
+  }
+
+  @override
+  void dispose() {
+    _imageRefresher.dispose();
+    super.dispose();
   }
 
   @override
@@ -85,14 +91,18 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      width: w,
-                      height: imageHeight,
-                      child: PageView.builder(
+                        width: w,
+                        height: imageHeight,
+                        child: StreamBuilder(
+                            stream: _imageRefresher.imageRefreshStream,
+                            initialData: widget.post.imagesFileList[0].imageFile,
+                            builder: (context, snap) {
+                              return PageView.builder(
                                 controller: PageController(
                                     initialPage: 0
                                 ),
                                 scrollDirection: Axis.horizontal,
-                                itemCount: widget.post.imagesBytesList.length,
+                                itemCount: widget.post.imagesFileList.length,
 
                                 onPageChanged: (index) {
                                   setState(() {
@@ -101,8 +111,6 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                                   });
                                 },
                                 itemBuilder: (BuildContext context, int index) {
-                                  print("AAAA");
-                                  print(widget.post.imagesBytesList.length);
                                   //Uint8List headedBitmap = widget.post.imagesBytesList[index].bitmapImage.buildHeaded();
                                   //File f = new File(widget.post.imagesPickedList[index].identifier);
                                   return Hero(
@@ -111,24 +119,26 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                                       decoration: new BoxDecoration(
                                         image: new DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: new MemoryImage(Img.encodeJpg(widget.post.imagesBytesList[index].image))
-                                            //image: new MemoryImage(Img.encodeJpg(widget.post.imagesBytesList[index].image))
-                                            //image: new FileImage(f)
+                                            image: FileImage(snap.data)
+                                          //image: new MemoryImage(Img.encodeJpg(widget.post.imagesBytesList[index].image))
+                                          //image: new FileImage(f)
                                         ),
                                       ),
                                       child: new BackdropFilter(
                                         filter: new ImageFilter.blur(
-                                            sigmaX: widget.post.imagesBytesList[index].blurSigmaX,
-                                            sigmaY: widget.post.imagesBytesList[index].blurSigmaY),
+                                            sigmaX: widget.post.imagesFileList[index].blurSigmaX,
+                                            sigmaY: widget.post.imagesFileList[index].blurSigmaY),
                                         child: new Container(
                                           decoration: new BoxDecoration(
-                                              color: widget.post.imagesBytesList[index].filterColor),
+                                              color: widget.post.imagesFileList[index].filterColor),
                                         ),
                                       ),
                                     ),
                                   );
                                 },
-                              ),
+                              );
+                            }
+                        )
                     ),
                     Container(
                       width: w,
@@ -136,7 +146,7 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: DotsIndicator(
-                          dotsCount: widget.post.imagesBytesList.length,
+                          dotsCount: widget.post.imagesFileList.length,
                           position: listIndex.toDouble(),                                       // showing dots animation
                           decorator: DotsDecorator(
                             size: const Size.square(8.0),
@@ -183,7 +193,7 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                           ),
                           onTap: () {
                             setState(() {
-                              widget.post.imagesBytesList[listIndex].filterColor =  PostConfig.imageFilter[index].color;
+                              widget.post.imagesFileList[listIndex].filterColor =  PostConfig.imageFilter[index].color;
                             });
                           },
                         ),
@@ -196,21 +206,25 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                   width: w,
                   child: Column(
                     children: <Widget>[
-                      /*Container(
+                      Container(
                         width: w,
                         height: 30,
                         child:Slider(
                           label: 'Brightness',
-                          min: -255,
-                          max: 255,
-                          value: widget.post.imagesBytesList[listIndex].brightness,
+                          min: -100,
+                          max: 100,
+                          value: widget.post.imagesFileList[listIndex].brightness,
                           onChanged: (value) {
                             print(value);
-                            updatePicutre(widget.post.imagesBytesList[listIndex].contrast, value);
+                            setState(() {
+                              widget.post.imagesFileList[listIndex].brightness = value;
+                            });
+                            _imageRefresher.updatePicutre(widget.post.imagesFileList[listIndex].imagePath, value);
+                            //updatePicutre(widget.post.imagesFileList[listIndex].brightness, value);
 
                           },
                         ),
-                      ),*/
+                      ),
                       Expanded(
                         child:ListView(
                           scrollDirection: Axis.horizontal,
@@ -269,10 +283,32 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
   void updatePicutre(double contrast, double brightness)  {
     //widget.post.imagesBytesList[listIndex].image =  Img.contrast(widget.post.imagesBytesList[listIndex].image, brightness);
     setState(() {
-      widget.post.imagesBytesList[listIndex].brightness = brightness;
+      widget.post.imagesFileList[listIndex].brightness = brightness;
       //widget.post.imagesBytesList[listIndex].imgBytes = Img.encodeJpg(widget.post.imagesBytesList[listIndex].image);
     });
     //picutreStream.add(Img.encodeJpg(Img.contrast(widget.post.imagesBytesList[listIndex].image, brightness)));
+  }
+
+}
+
+class ImageRefresher {
+  StreamController<File> _controller;
+  final File imageFile;
+
+  ImageRefresher({this.imageFile}){
+    _controller = StreamController();
+  }
+
+  Stream<File> get imageRefreshStream => _controller.stream;
+
+
+  void updatePicutre(String imagePath, double brightness)  async{
+    File f = await FlutterNativeImage.adjustBrightness(imagePath, brightness);
+    _controller.sink.add(f);
+  }
+
+  dispose() {
+    _controller.close();
   }
 
 }
