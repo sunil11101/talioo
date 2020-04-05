@@ -2,22 +2,26 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:talio_travel/models/img_files.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:talio_travel/utils/flutter_native_image.dart';
+
+import '../global.dart';
 
 class Post {
   List<Asset> imagesPickedList = List<Asset>();
   List<ImgFile> imagesFileList = List<ImgFile>();
   //Map<String, Color> imagesFilterMap = HashMap<String, Color>();
   File mainVideo = null;
-  String videoAspect;
+  String videoAspectRatio = PostConfig.cameraAspectRatio[1];
+  Color videoFilterColor = Colors.white.withOpacity(0.0);
   String imageTakenPath;
   String postTitle;
   String location;
   String videoDesc;
-  DateTime travelDate;
+  String travelDate;
 
   Post();
 
@@ -25,11 +29,11 @@ class Post {
 
   Future<void> processImagesBytesList() async{
     for(int i=0; i < imagesPickedList.length; i++){
-      print("PRINT" + i.toString());
       bool sameImage = false;
 
       for(int j=0; j< imagesFileList.length; j++){
         if(imagesFileList[j].identifier == imagesPickedList[i].identifier) {
+          print("PRINT" + i.toString());
           sameImage = true;
           break;
         }
@@ -54,7 +58,9 @@ class Post {
         //await Isolate.spawn(decode, new DecodeParam(imageUint8List, receivePort.sendPort));
         //Img.Image imgToAdjust = await receivePort.first;
         //File f = await FlutterNativeImage.adjustBrightness(imagePath, 100);
-        imagesFileList.add(ImgFile(imagesPickedList[i].identifier, File(imagePath), imagePath));
+        //FileImage fileImg = FileImage(imageFile);
+        Image img = Image.file(imageFile, gaplessPlayback: true, fit: BoxFit.cover);
+        imagesFileList.add(ImgFile(imagesPickedList[i].identifier, img, imagePath));
         //imagesFileList.add(ImgByte(imagesPickedList[i].identifier, imageFile, imagePath));
       }
     }

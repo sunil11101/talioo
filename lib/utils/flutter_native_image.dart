@@ -85,10 +85,15 @@ class FlutterNativeImage {
   }
 
   static Future<File> adjustBrightness(
-      String fileName, double brightness) async {
-    var file = await _channel.invokeMethod("adjustBrightness", {
+      String fileName, double brightness, double contrast, double saturation, double tiltX, double tiltY, double tiltRadius) async {
+    var file = await _channel.invokeMethod("adjustImage", {
       'file': fileName,
       'brightness': brightness,
+      'contrast': contrast,
+      'saturation': saturation,
+      'tiltX': tiltX,
+      'tiltY': tiltY,
+      'tiltRadius': tiltRadius,
     });
 
     return new File(file);

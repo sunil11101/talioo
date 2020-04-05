@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:talio_travel/models/post.dart';
 import 'package:talio_travel/pages/new_post_camera.dart';
+import 'package:talio_travel/pages/new_post_preview.dart';
 import 'package:talio_travel/pages/search.dart';
 import 'package:video_player/video_player.dart';
 import 'package:unicorndial/unicorndial.dart';
@@ -24,6 +27,8 @@ class NewPostInfoPage extends StatefulWidget{
 
 class NewPostInfoPageState extends State<NewPostInfoPage>{
   VideoPlayerController _videoPlayerController;
+  var _formKey = GlobalKey<FormState>();
+  var textFieldTravelDate = TextEditingController();
 
   @override
   void initState() {
@@ -102,6 +107,20 @@ class NewPostInfoPageState extends State<NewPostInfoPage>{
     const tfPadding = EdgeInsets.all(7.0);
 
 
+    DateTime selectedDate = DateTime.now();
+    Future<Null> _selectDate(BuildContext context) async {
+      final DateTime picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate,
+          firstDate: DateTime(1950),
+          lastDate: DateTime(2030));
+      if (picked != null && picked != selectedDate)
+        setState(() {
+          selectedDate = picked;
+          textFieldTravelDate.value = TextEditingValue(text: picked.year.toString() + "-" + picked.month.toString().padLeft(2, '0') + "-" + picked.day.toString().padLeft(2, '0'));
+        });
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -118,198 +137,334 @@ class NewPostInfoPageState extends State<NewPostInfoPage>{
         actions: <Widget>[
           FlatButton(
             child: Text("Next"),
-            onPressed: (){},
+            onPressed: (){
+
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        NewPostPreviewPage(
+                            post: widget.post
+                        ),
+                  ),
+                );
+              }
+            },
           )
         ],
       ),
       body: WillPopScope(
         onWillPop: _popToHome,
-        child:
-        Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Post Title',
-                      contentPadding: tfPadding,
-                      prefixIcon: Icon(Icons.title),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'Location',
-                      contentPadding: tfPadding,
-                      prefixIcon: Icon(Icons.place),
-                    ),
-                    onTap: (){
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SearchPage()));
-                    },
-                  ),
-                ),
-              ],
-            ),
-            widget.post.mainVideo != null?
-            IntrinsicHeight(
-              child:Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Row(
                 children: <Widget>[
                   Expanded(
-                    flex: 3,
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 0.5, color: Colors.blueAccent))
+                    child: TextFormField(
+                      autofocus: false,
+                      initialValue: widget.post.postTitle == null?"":widget.post.postTitle,
+                      decoration: InputDecoration(
+                        labelText: 'Post Title',
+                        contentPadding: tfPadding,
+                        prefixIcon: Icon(Icons.title),
                       ),
-                      child: widget.post.mainVideo != null ?
-                      AspectRatio(
-                        aspectRatio: 1.0,
-                        child: VideoPlayer(_videoPlayerController),
-                      )
-                          :
-                      Container(),
+                      validator: (value) {
+                        if (value.length == 0)
+                          return ("Post Title Can't be Empty!");
+
+                        return value = null;
+                      },
+                      onSaved: (String value) {
+                        setState(() {
+                          widget.post.postTitle = value;
+                        });
+                      },
                     ),
                   ),
-                  Expanded(
-                      flex: 6,
-                      child: ConstrainedBox(
-                        constraints: new BoxConstraints(
-                          minHeight: 120,
-                          maxHeight: 120,
-                        ),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          reverse: true,
-                          child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              labelText: 'Video Description',
-                              contentPadding: tfPadding,
-                              prefixIcon: Icon(Icons.description),
-                            ),
-                          ),
-                        ),
-                      )
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Icon(Icons.clear, size: iconSize)
-                  )
                 ],
               ),
-            ) : Container(),
-            Expanded(child:  Container(
-              width: w,
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: List.generate(
-                    widget.post.imagesPickedList.length, (index){
-                  return Dismissible(
-                    child: Container(
-                      decoration:
-                      new BoxDecoration(
-                          border: new Border(
-                              bottom: new BorderSide(color: Theme.of(context).dividerColor)
-                          )
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      //readOnly: true,
+                      autofocus: false,
+                      initialValue: widget.post.location == null?"":widget.post.location,
+                      decoration: InputDecoration(
+                        labelText: 'Location',
+                        contentPadding: tfPadding,
+                        prefixIcon: Icon(Icons.place),
                       ),
-                      child:IntrinsicHeight(
-                        key: ValueKey(index),
-                        child:Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: AssetThumb(
-                                    asset: widget.post.imagesPickedList[index],
-                                    width: 200,
-                                    height: 200,
-                                  )
-                              ),
-                            ),
-                            Expanded(
-                                flex: 6,
-                                child: ConstrainedBox(
-                                  constraints: new BoxConstraints(
-                                    minHeight: 120,
-                                    maxHeight: 120,
-                                  ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    reverse: true,
-                                    child: TextField(
-                                      keyboardType: TextInputType.multiline,
-                                      maxLines: null,
-                                      decoration: InputDecoration(
-                                          labelText: 'Image Description',
-                                          contentPadding: tfPadding,
-                                          prefixIcon: Icon(Icons.image_aspect_ratio),
-                                          border: InputBorder.none
-                                      ),
-                                    ),
-                                  ),
-                                )
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: widget.post.imagesPickedList.length > 1 ? Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: index > 0 ? GestureDetector(
-                                      child: Icon(Icons.arrow_upward, size: iconSize),
-                                      onTap: (){
-                                        _updateListItems(index, "UP");
-                                      },
-                                    ) : Container(),
-                                  ),Expanded(
-                                    child: index < widget.post.imagesPickedList.length - 1 ? GestureDetector(
-                                      child: Icon(Icons.arrow_downward, size: iconSize),
-                                      onTap: (){
-                                        _updateListItems(index, "DOWN");
-                                      },
-                                    ) : Container(),
-                                  ),
-                                ],
-                              ) : Container(),
-                            ),
-                          ],
+                      validator: (value) {
+                        if (value.length == 0)
+                          return ("Location Can't be Empty!");
+
+                        return value = null;
+                      },
+                      onSaved: (String value) {
+                        setState(() {
+                          widget.post.location = value;
+                        });
+                      },
+                      /*onTap: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SearchPage()));
+                    },*/
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          autofocus: false,
+                          //initialValue: widget.post.travelDate == null?"":widget.post.travelDate,
+                          keyboardType: TextInputType.datetime,
+                          controller: textFieldTravelDate,
+                          decoration: InputDecoration(
+                            labelText: widget.post.travelDate == null?"Travel Date":widget.post.travelDate,
+                            contentPadding: tfPadding,
+                            prefixIcon: Icon(Icons.calendar_today),
+                          ),
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Travel Date Can't be Empty!");
+
+                            return value = null;
+                          },
+                          onSaved: (String value) {
+                            setState(() {
+                              widget.post.travelDate = value;
+                            });
+                          },
                         ),
                       ),
                     ),
-                    onDismissed: (direction) {
-                      var item = widget.post.imagesPickedList.elementAt(index);
-                      //To delete
-                      setState(() {
-                        widget.post.imagesPickedList.removeAt(index);
-                      });
-                      //To show a snackbar with the UNDO button
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text("Item deleted"),
-                          action: SnackBarAction(
-                              label: "UNDO",
-                              onPressed: () {
-                                //To undo deletion
-                                widget.post.imagesPickedList.insert(index, item);
-                              })));
-                    },
-                  );
-                }
+                  ),
+                ],
+              ),
+              widget.post.mainVideo != null?
+              IntrinsicHeight(
+                child:Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.25,
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      caption: 'Delete',
+                      color: Colors.red,
+                      icon: Icons.delete,
+                      onTap: (){
+                        setState(() {
+                          widget.post.mainVideo = null;
+                          widget.post.videoDesc = null;
+                        });
+                      },
+                    ),
+                  ],
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(width: 0.5, color: Colors.blueAccent))
+                          ),
+                          child: widget.post.mainVideo != null ?
+                          Stack(children: <Widget>[
+                            AspectRatio(
+                              aspectRatio: 1.0,
+                              // Use the VideoPlayer widget to display the video.
+                              child: VideoPlayer(_videoPlayerController),
+                            ),
+                            BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+                              child: new Container(
+                                decoration: new BoxDecoration(
+                                    color: widget.post.videoFilterColor),
+                              ),
+                            )
+                          ]
+                          )
+                              :
+                          Container(),
+                        ),
+                      ),
+                      Expanded(
+                          flex: 7,
+                          child: ConstrainedBox(
+                            constraints: new BoxConstraints(
+                              minHeight: 120,
+                              maxHeight: 120,
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              reverse: true,
+                              child: TextFormField(
+                                autofocus: false,
+                                initialValue: widget.post.videoDesc == null?"":widget.post.videoDesc,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  labelText: 'Video Description',
+                                  contentPadding: tfPadding,
+                                  prefixIcon: Icon(Icons.description),
+                                ),
+                                validator: (value) {
+                                  if (value.length == 0)
+                                    return ("Video Description Can't be Empty!");
+
+                                  return value = null;
+                                },
+                                onSaved: (String value) {
+                                  setState(() {
+                                    widget.post.videoDesc = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              ) : Container(),
+              Expanded(child:  Container(
+                width: w,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: List.generate(
+                      widget.post.imagesPickedList.length, (index){
+                    return Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.25,
+                      secondaryActions: <Widget>[
+                        IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              var item = widget.post.imagesPickedList.elementAt(index);
+                              //To delete
+                              setState(() {
+                                widget.post.imagesPickedList.removeAt(index);
+                              });
+                              //To show a snackbar with the UNDO button
+                              Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text("Item deleted"),
+                                      action: SnackBarAction(
+                                          label: "UNDO",
+                                          onPressed: () {
+                                            //To undo deletion
+                                            widget.post.imagesPickedList.insert(index, item);
+                                          })
+                                  )
+                              );
+                            }
+                        ),
+                      ],
+                      child:  Container(
+                        decoration:
+                        new BoxDecoration(
+                            border: new Border(
+                                bottom: new BorderSide(color: Theme.of(context).dividerColor)
+                            )
+                        ),
+                        child:IntrinsicHeight(
+                          key: ValueKey(index),
+                          child:Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: AssetThumb(
+                                      asset: widget.post.imagesPickedList[index],
+                                      width: 200,
+                                      height: 200,
+                                    )
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 6,
+                                  child: ConstrainedBox(
+                                    constraints: new BoxConstraints(
+                                      minHeight: 120,
+                                      maxHeight: 120,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      reverse: true,
+                                      child: TextFormField(
+                                        autofocus: false,
+                                        keyboardType: TextInputType.multiline,
+                                        maxLines: null,
+                                        decoration: InputDecoration(
+                                            labelText: 'Image Description',
+                                            contentPadding: tfPadding,
+                                            prefixIcon: Icon(Icons.image_aspect_ratio),
+                                            border: InputBorder.none
+                                        ),
+                                        validator: (value) {
+                                          if (value.length == 0)
+                                            return ("Image Description Can't be Empty!");
+
+                                          return value = null;
+                                        },
+                                        onSaved: (String value) {
+                                          setState(() {
+                                            widget.post.imagesFileList[index].imageDesc = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  )
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: widget.post.imagesPickedList.length > 1 ? Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: index > 0 ? GestureDetector(
+                                        child: Icon(Icons.arrow_upward, size: iconSize),
+                                        onTap: (){
+                                          _updateListItems(index, "UP");
+                                        },
+                                      ) : Container(),
+                                    ),Expanded(
+                                      child: index < widget.post.imagesPickedList.length - 1 ? GestureDetector(
+                                        child: Icon(Icons.arrow_downward, size: iconSize),
+                                        onTap: (){
+                                          _updateListItems(index, "DOWN");
+                                        },
+                                      ) : Container(),
+                                    ),
+                                  ],
+                                ) : Container(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  ),
                 ),
               ),
-            ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: UnicornDialer(

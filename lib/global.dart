@@ -6,6 +6,7 @@ import 'models/img_filter.dart';
 class PostConfig{
   static List<String> pageViewTitle = ["Video","Images"];
   static List<String> cameraAspectRatio = ["1:1","16:9"];
+  static Map<String, IconData> imageEditType = {"Adjust": Icons.crop_rotate,"Brightness": Icons.brightness_5,"Contrast": Icons.brightness_6,"Saturation": Icons.opacity,"Focus": Icons.adjust};
   static List<ImgFilter> imageFilter = [
     ImgFilter("","Filter1", Color.fromRGBO(200, 0, 0, 0.5)),
     ImgFilter("","Filter2", Color.fromRGBO(200, 0, 0, 0.5)),

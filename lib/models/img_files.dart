@@ -7,18 +7,25 @@ import 'package:image/image.dart' as Img;
 
 class ImgFile{
   String identifier;
-  File imageFile;
+  Image image;
+  //FileImage image;
   String imagePath;
+  String imageDesc;
   String aspectRatio;
   Color filterColor = Colors.white.withOpacity(0.0);
   double blurSigmaX = 0.0;
   double blurSigmaY = 0.0;
-  //@param contrast 0..10 1 is default
   // @param brightness -255..255 0 is default
-  double contrast = 0;
   double brightness = 0;
+  //@param contrast 0..10 1 is default
+  double contrast = 0;
+  //@param contrast 0..2 1 is default
+  double saturation = 0;
+  double tiltX = 500;
+  double tiltY = 500;
+  double tiltRadius = 100;
 
 
 
-  ImgFile(this.identifier, this.imageFile, this.imagePath);
+  ImgFile(this.identifier, this.image, this.imagePath);
 }

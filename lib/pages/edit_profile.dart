@@ -23,7 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String userEmail, userPhone, userGender, userBirth, userProfilePic = '', joiningDate;
   String userName = '';
 
-  var formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
   var textFieldName = TextEditingController();
   var textFieldEmail = TextEditingController();
   var textFieldGender = TextEditingController();
@@ -89,9 +89,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   // saving new data to firebase if user make any changes
   Future _saveDataToDb() async {
-    if (formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       print("here");
-      formKey.currentState.save();
+      _formKey.currentState.save();
       FocusScope.of(context).unfocus();
       var data = {
         'name': userName,
@@ -286,7 +286,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   // after save button is pressed
-  _saveButtonPreesed() async {
+  _saveButtonPressed() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _saveDataToDb().whenComplete(() {
       setState(() {
@@ -379,7 +379,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                   ),
                   child: Form(
-                      key: formKey,
+                      key: _formKey,
                       child: Column(
                         children: <Widget>[
                           ListTile(
@@ -571,7 +571,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   onTap: () {
-                    _saveButtonPreesed();
+                    _saveButtonPressed();
                   },
                 ),
                 SizedBox(

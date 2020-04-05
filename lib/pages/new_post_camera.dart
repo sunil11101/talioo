@@ -36,7 +36,6 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
 
   List<String> pageViewList = PostConfig.pageViewTitle;
   String imageAspectRatio = PostConfig.cameraAspectRatio[1];
-  String videoAspectRatio = PostConfig.cameraAspectRatio[1];
 
   List<Asset> imagesPickedList = List<Asset>();
   String videoRecordedPath;
@@ -99,9 +98,9 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
     double cameraWidth = MediaQuery.of(context).size.width;
     double cameraHeight = MediaQuery.of(context).size.width;
 
-    if(isVideoPage && videoAspectRatio == PostConfig.cameraAspectRatio[0]){
+    if(isVideoPage && widget.post.videoAspectRatio == PostConfig.cameraAspectRatio[0]){
       cameraHeight = cameraWidth;
-    }else if(isVideoPage && videoAspectRatio == PostConfig.cameraAspectRatio[1]){
+    }else if(isVideoPage && widget.post.videoAspectRatio == PostConfig.cameraAspectRatio[1]){
       cameraHeight = cameraWidth * 16 / 9;
     }
     if(!isVideoPage && imageAspectRatio == PostConfig.cameraAspectRatio[0]){
@@ -165,7 +164,7 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
                   onTap: () {
                     if(isVideoPage){
                       setState(() {
-                        videoAspectRatio = PostConfig.cameraAspectRatio[0];
+                        widget.post.videoAspectRatio = PostConfig.cameraAspectRatio[0];
                       });
                     }else{
 
@@ -182,7 +181,7 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
                   onTap: () {
                     if(isVideoPage){
                       setState(() {
-                        videoAspectRatio = PostConfig.cameraAspectRatio[1];
+                        widget.post.videoAspectRatio = PostConfig.cameraAspectRatio[1];
                       });
                     }else{
 
@@ -295,7 +294,9 @@ class NewPostCameraPageState extends State<NewPostCameraPage>{
                               _takePicture().then((String imageTakenPath) async{
                                 print('Picture saved to $imageTakenPath');
                                 //File f = await FlutterNativeImage.adjustBrightness(imageTakenPath, 100);
-                                widget.post.imagesFileList.add(ImgFile(null, File(imageTakenPath), imageTakenPath)) ;
+                                File imageFile = File(imageTakenPath);
+                                Image img = Image.file(imageFile, gaplessPlayback: true, fit: BoxFit.cover);
+                                widget.post.imagesFileList.add(ImgFile(null, img, imageTakenPath)) ;
                                 _pushToNewPostInfo();
                               });
                             }

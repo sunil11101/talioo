@@ -12,10 +12,26 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.ColorFilter;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RadialGradient;
+import android.graphics.LinearGradient;
+import android.graphics.Shader.TileMode;
+import android.graphics.BlurMaskFilter;
+import android.graphics.RectF;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+import android.content.Context;
+import android.os.Build;
 import android.media.ExifInterface;
 import android.util.Log;
 
@@ -32,11 +48,26 @@ import java.util.List;
 public class MainActivity extends FlutterActivity {
   private static final String CHANNEL = "flutter_native_image";
 
+  private static double DELTA_INDEX[] = {
+          0,    0.01, 0.02, 0.04, 0.05, 0.06, 0.07, 0.08, 0.1,  0.11,
+          0.12, 0.14, 0.15, 0.16, 0.17, 0.18, 0.20, 0.21, 0.22, 0.24,
+          0.25, 0.27, 0.28, 0.30, 0.32, 0.34, 0.36, 0.38, 0.40, 0.42,
+          0.44, 0.46, 0.48, 0.5,  0.53, 0.56, 0.59, 0.62, 0.65, 0.68,
+          0.71, 0.74, 0.77, 0.80, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98,
+          1.0,  1.06, 1.12, 1.18, 1.24, 1.30, 1.36, 1.42, 1.48, 1.54,
+          1.60, 1.66, 1.72, 1.78, 1.84, 1.90, 1.96, 2.0,  2.12, 2.25,
+          2.37, 2.50, 2.62, 2.75, 2.87, 3.0,  3.2,  3.4,  3.6,  3.8,
+          4.0,  4.3,  4.7,  4.9,  5.0,  5.5,  6.0,  6.5,  6.8,  7.0,
+          7.3,  7.5,  7.8,  8.0,  8.4,  8.7,  9.0,  9.4,  9.6,  9.8,
+          10.0
+  };
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     GeneratedPluginRegistrant.registerWith(this);
     Activity activity = this;
+    Context mContext = this;
 
     new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
             new MethodChannel.MethodCallHandler() {
@@ -182,11 +213,21 @@ public class MainActivity extends FlutterActivity {
 
                   return;
                 }
-                if (call.method.equals("adjustBrightness")) {
+                if (call.method.equals("adjustImage")) {
                   String fileName = call.argument("file");
                   double brightness = call.argument("brightness");
+                  double contrast = call.argument("contrast");
+                  double saturation = call.argument("saturation");
+                  double tiltX = call.argument("tiltX");
+                  double tiltY = call.argument("tiltY");
+                  double tiltRadius = call.argument("tiltRadius");
 
-                  float value = (float)brightness;
+                  float fBrightness = (float)brightness;
+                  int fContrast = (int)contrast;
+                  float fSaturation = (float)saturation;
+                  float fTiltX = (float)tiltX;
+                  float fTiltY = (float)tiltY;
+                  float fTiltRadius = (float)tiltRadius;
 
                   File file = new File(fileName);
 
@@ -195,33 +236,62 @@ public class MainActivity extends FlutterActivity {
                     return;
                   }
 
-                  Bitmap bmp = BitmapFactory.decodeFile(fileName);
-                  ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-                  ColorMatrix cm = new ColorMatrix(new float[]
-                          {
-                                  1, 0, 0, 0, value,
-                                  0, 1, 0, 0, value,
-                                  0, 0, 1, 0, value,
-                                  0, 0, 0, 1, 0
-                          });
-
-                  Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
-
-                  Canvas canvas = new Canvas(ret);
 
                   Paint paint = new Paint();
-                  paint.setColorFilter(new ColorMatrixColorFilter(cm));
+
+                  Bitmap bmp = BitmapFactory.decodeFile(fileName);
+                  ByteArrayOutputStream bos = new ByteArrayOutputStream();
+/*
+                  Bitmap blurBmp = fastblur(mContext, bmp, 8);
+
+                  Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+                  Canvas canvas = new Canvas(ret);
+                  //Paint p = setData(fTiltX, fTiltY, fTiltRadius, ret);
+                  canvas.drawBitmap(blurBmp, bmp.getWidth(), bmp.getHeight(),null);
+                  //canvas.drawRect(0 ,0 , bmp.getWidth(), bmp.getHeight(), p);
+
+                  //Bitmap croppedBitmap = setData(fTiltX, fTiltY, fTiltRadius, bmp);
+*/
+
+                  //canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), p);
+
+                  /*Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+
+                  Canvas canvas = new Canvas(ret);
+                  ColorFilter cf = adjustColor(fBrightness, fContrast, fSaturation);
+                  paint.setColorFilter(cf);
                   canvas.drawBitmap(bmp, 0, 0, paint);
+*/
+
+                  Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+                  Canvas canvas = new Canvas(ret);
+                  canvas.drawColor(Color.TRANSPARENT);
+                  //ColorFilter cf = adjustColor(fBrightness, fContrast, fSaturation);
+                  //paint.setColorFilter(cf);
+                  //canvas.drawBitmap(blurBmp, 0, 0, paint);
+                  Bitmap blurBmp = fastblur(mContext, bmp, 5);
+                  canvas.drawBitmap(blurBmp, 0, 0, null);
+
+                  Paint p = setData(fTiltX, fTiltY, fTiltRadius, ret);
+                  canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), p);
+
+                  /*Bitmap ret2 = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+                  Canvas canvas2 = new Canvas(ret2);
+                  //canvas2.drawBitmap(bmp, 0, 0, null);
+                  Bitmap bm2 = tiltShift(bmp, 10, (int)fTiltX, (int)fTiltY);
+
+                  canvas2.drawBitmap(bm2, 0, 0, null);
+*/
 
                   ret.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                   ret.recycle();
+                  blurBmp.recycle();
                   bmp.recycle();
                   OutputStream outputStream = null;
 
                   try {
                     String outputFileName = File.createTempFile(
-                            getFilenameWithoutExtension(file).concat("_adjustedBrightness"),
+                            getFilenameWithoutExtension(file).concat("_adjustedImage"),
                             ".jpg",
                             activity.getExternalCacheDir()
                     ).getPath();
@@ -256,6 +326,173 @@ public class MainActivity extends FlutterActivity {
                   result.notImplemented();
                 }
               }});
+  }
+
+  public static ColorFilter adjustColor(float brightness, int contrast, float saturation){
+    ColorMatrix cm = new ColorMatrix();
+    adjustContrast(cm, contrast);
+    adjustBrightness(cm, brightness);
+    adjustSaturation(cm, saturation);
+
+    return new ColorMatrixColorFilter(cm);
+  }
+
+  public static void adjustBrightness(ColorMatrix cm, float value) {
+    value = cleanValue(value,100);
+    if (value == 0) {
+      return;
+    }
+
+    float[] mat = new float[]
+            {
+                    1,0,0,0,value,
+                    0,1,0,0,value,
+                    0,0,1,0,value,
+                    0,0,0,1,0,
+                    0,0,0,0,1
+            };
+    cm.postConcat(new ColorMatrix(mat));
+  }
+
+  public static void adjustContrast(ColorMatrix cm, int value) {
+    value = (int)cleanValue(value,100);
+    if (value == 0) {
+      return;
+    }
+    float x;
+    if (value < 0) {
+      x = 127 + (float) value / 100*127;
+    } else {
+      x = value % 1;
+      if (x == 0) {
+        x = (float)DELTA_INDEX[value];
+      } else {
+        //x = DELTA_INDEX[(p_val<<0)]; // this is how the IDE does it.
+        x = (float)DELTA_INDEX[(value)]*(1-x) + (float)DELTA_INDEX[(value)+1] * x; // use linear interpolation for more granularity.
+      }
+      x = x*127+127;
+    }
+
+    float[] mat = new float[]
+            {
+                    x/127,0,0,0, 0.5f*(127-x),
+                    0,x/127,0,0, 0.5f*(127-x),
+                    0,0,x/127,0, 0.5f*(127-x),
+                    0,0,0,1,0,
+                    0,0,0,0,1
+            };
+    cm.postConcat(new ColorMatrix(mat));
+  }
+
+  public static void adjustSaturation(ColorMatrix cm, float value) {
+    value = cleanValue(value,100);
+    if (value == 0) {
+      return;
+    }
+
+    float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
+    float lumR = 0.3086f;
+    float lumG = 0.6094f;
+    float lumB = 0.0820f;
+
+    float[] mat = new float[]
+            {
+                    lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
+                    lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
+                    lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
+                    0,0,0,1,0,
+                    0,0,0,0,1
+            };
+    cm.postConcat(new ColorMatrix(mat));
+  }
+
+  protected static float cleanValue(float p_val, float p_limit)
+  {
+    return Math.min(p_limit, Math.max(-p_limit, p_val));
+  }
+
+  public Bitmap fastblur(Context context, Bitmap sentBitmap, int radius) {
+    Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
+
+    final RenderScript rs = RenderScript.create(context);
+    final Allocation input = Allocation.createFromBitmap(rs, sentBitmap, Allocation.MipmapControl.MIPMAP_NONE,
+            Allocation.USAGE_SCRIPT);
+    final Allocation output = Allocation.createTyped(rs, input.getType());
+    final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+    script.setRadius(radius);
+    script.setInput(input);
+    script.forEach(output);
+    output.copyTo(bitmap);
+    return bitmap;
+  }
+
+  public Paint setData(float tiltX, float tiltY, float tiltRadius, Bitmap bmp) {
+    Paint paint = new Paint();
+    float tiltGradientRadius = tiltRadius / 2.0f;
+    double bitmapResizedRatio = 1;
+    //drawBitmap(previewBitmap);
+
+    // 现在需要绘制一个带有渐变透明度的shader
+    // 总共有4个区域
+    // 0到1的区域是完全不透明
+    // 1到2的区域是从不透明渐变到透明
+    // 2到3的区域是完全透明
+    int colors[] = new int[4];
+    colors[0] = 0x00ffffff;
+    colors[1] = 0x00ffffff;
+    colors[2] = 0xffffffff;
+    colors[3] = 0xffffffff;
+
+    float tiltRadius1;
+    tiltRadius1 = tiltRadius - tiltGradientRadius;
+
+    //tiltRadius1 = tiltRadius - tiltGradientRadius;
+    tiltRadius1 = Math.min(tiltRadius1, bmp.getWidth());
+    tiltRadius1 = Math.max(tiltRadius1, 0.0f);
+    float tiltRadius2 = tiltRadius;
+    tiltRadius2 = Math.min(tiltRadius2, bmp.getWidth());
+    tiltRadius2 = Math.max(tiltRadius2, 0.0f);
+
+    float positions[] = new float[4];
+    positions[0] = 0.0f;
+    positions[1] = tiltRadius1 / tiltRadius;
+    positions[2] = tiltRadius2 / tiltRadius;
+    positions[3] = 1.0f;
+
+    // 将屏幕上的坐标转成bitmap的坐标
+    float shaderTiltX = (float) (tiltX / bitmapResizedRatio);
+    float shaderTiltY = (float) (tiltY / bitmapResizedRatio);
+    // 将屏幕上的移轴半径改成bitmap的移轴半径
+    float shaderTiltRadius = (float) (tiltRadius / bitmapResizedRatio);
+
+    RadialGradient shader = new RadialGradient(shaderTiltX, shaderTiltY, shaderTiltRadius, colors, positions, TileMode.CLAMP);
+    //LinearGradient shader = new LinearGradient(0, 100, 0, 200, 0xffffffff, 0x00ffffff, TileMode.CLAMP);
+    paint.setColor(Color.RED);
+    paint.setShader(shader);
+    // Mode.DST_IN是绘制2层图片的交集，在这里是将模糊图片与带有渐变透明度的shader取交集进行绘制。
+    paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
+    //shiftCanvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), paint);
+    return paint;
+  }
+
+  public static Bitmap tiltShift(Bitmap sentBitmap, int radius, int x,
+                                 int y) {
+
+    RectF rectF = new RectF(0,0,sentBitmap.getWidth(),sentBitmap.getHeight());
+    float blurRadius = 100.0f;
+    Bitmap bitmapResult = Bitmap.createBitmap(sentBitmap.getWidth(), sentBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvasResult = new Canvas(bitmapResult);
+    Paint blurPaintOuter = new Paint();
+    blurPaintOuter.setColor(0xFFffffff);
+    blurPaintOuter.setMaskFilter(new
+            BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.INNER));
+    canvasResult.drawBitmap(sentBitmap, 0, 0, blurPaintOuter);
+    Paint blurPaintInner = new Paint();
+    blurPaintInner.setColor(0x80ffffff);
+    blurPaintInner.setMaskFilter(new
+            BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.INNER));
+    canvasResult.drawRect(rectF, blurPaintInner);
+    return bitmapResult;
   }
 
   private void copyExif(String filePathOri, String filePathDest) {
