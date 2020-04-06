@@ -44,6 +44,13 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import android.graphics.Path;;
+
+
+//import java.awt.*;
+//import java.awt.image.*;
+//import java.awt.geom.*;
+
 
 public class MainActivity extends FlutterActivity {
   private static final String CHANNEL = "flutter_native_image";
@@ -61,6 +68,28 @@ public class MainActivity extends FlutterActivity {
           7.3,  7.5,  7.8,  8.0,  8.4,  8.7,  9.0,  9.4,  9.6,  9.8,
           10.0
   };
+
+
+
+  public  Bitmap GetBitmapClippedCircle( Bitmap bitmap, float tx, float ty, float tr) {
+
+    final int width = bitmap.getWidth();
+    final int height = bitmap.getHeight();
+    final Bitmap outputBitmap = Bitmap.createBitmap(width, height, bitmap.getConfig());
+    
+    final Path path = new Path();
+    path.addCircle(
+              (float)(tx)
+            , (float)(ty)
+            , (float) tr*5
+            , Path.Direction.CCW);
+
+    final Canvas canvas = new Canvas(outputBitmap);
+    canvas.clipPath(path);
+    canvas.drawBitmap(bitmap, 0, 0, null);
+    return outputBitmap;
+}
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +243,7 @@ public class MainActivity extends FlutterActivity {
                   return;
                 }
                 if (call.method.equals("adjustImage")) {
+                  //return;
                   String fileName = call.argument("file");
                   double brightness = call.argument("brightness");
                   double contrast = call.argument("contrast");
@@ -235,7 +265,6 @@ public class MainActivity extends FlutterActivity {
                     result.error("file does not exist", fileName, null);
                     return;
                   }
-
 
                   Paint paint = new Paint();
 
@@ -264,16 +293,35 @@ public class MainActivity extends FlutterActivity {
 */
 
                   Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+                  //Bitmap ret1 = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
                   Canvas canvas = new Canvas(ret);
                   canvas.drawColor(Color.TRANSPARENT);
                   //ColorFilter cf = adjustColor(fBrightness, fContrast, fSaturation);
                   //paint.setColorFilter(cf);
+                  int blurEffect=8;
+                  Bitmap blurBmp = fastblur(mContext, bmp, blurEffect);
                   //canvas.drawBitmap(blurBmp, 0, 0, paint);
-                  Bitmap blurBmp = fastblur(mContext, bmp, 5);
+                  //Bitmap blurBmp = drawShadow(bmp, (int)fTiltRadius);
                   canvas.drawBitmap(blurBmp, 0, 0, null);
+                  int j=blurEffect-1;
+                  int k=0;
 
-                  Paint p = setData(fTiltX, fTiltY, fTiltRadius, ret);
-                  canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), p);
+                  Bitmap cropImg[]={blurBmp, blurBmp, blurBmp, blurBmp, blurBmp, blurBmp, blurBmp};
+                  for(int i=blurEffect-2;i>0;i--)
+                  {
+                    Bitmap blurBmp1 = fastblur(mContext, bmp, i);
+                    cropImg[k++]=GetBitmapClippedCircle(blurBmp1, fTiltX, fTiltY, fTiltRadius*j--);
+                    //canvas.drawBitmap(blurBmp, 0, 0, null);
+                    canvas.drawBitmap(cropImg[k-1], 0, 0, null);
+                  }
+
+                  Bitmap cropImg1=GetBitmapClippedCircle( bmp, fTiltX, fTiltY, fTiltRadius*2);
+                  //canvas.drawBitmap(blurBmp, 0, 0, null);
+                  canvas.drawBitmap(cropImg1, 0, 0, null);
+
+
+                  //Paint p = setData(fTiltX, fTiltY, fTiltRadius, ret);
+                  //canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), p);
 
                   /*Bitmap ret2 = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
                   Canvas canvas2 = new Canvas(ret2);
@@ -336,6 +384,12 @@ public class MainActivity extends FlutterActivity {
 
     return new ColorMatrixColorFilter(cm);
   }
+
+
+  
+
+ 
+
 
   public static void adjustBrightness(ColorMatrix cm, float value) {
     value = cleanValue(value,100);
@@ -495,6 +549,23 @@ public class MainActivity extends FlutterActivity {
     return bitmapResult;
   }
 
+
+  public static Bitmap drawShadow(Bitmap map, int radius) {
+    if (map == null)
+        return null;
+
+    BlurMaskFilter blurFilter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.SOLID);
+    Paint shadowPaint = new Paint();
+    shadowPaint.setMaskFilter(blurFilter);
+
+    int[] offsetXY = new int[2];
+    Bitmap shadowImage = map.extractAlpha(shadowPaint, offsetXY);
+    shadowImage = shadowImage.copy(Bitmap.Config.ARGB_8888, true);
+    Canvas c = new Canvas(shadowImage);
+    c.drawBitmap(map, -offsetXY[0], -offsetXY[1], null);
+    return shadowImage;
+}
+
   private void copyExif(String filePathOri, String filePathDest) {
     try {
       ExifInterface oldExif = new ExifInterface(filePathOri);
@@ -552,4 +623,79 @@ public class MainActivity extends FlutterActivity {
       return fileName;
     }
   }
+
+
+
+
+/*
+
+  int mul_table[] = {
+        512,512,456,512,328,456,335,512,405,328,271,456,388,335,292,512,
+        454,405,364,328,298,271,496,456,420,388,360,335,312,292,273,512,
+        482,454,428,405,383,364,345,328,312,298,284,271,259,496,475,456,
+        437,420,404,388,374,360,347,335,323,312,302,292,282,273,265,512,
+        497,482,468,454,441,428,417,405,394,383,373,364,354,345,337,328,
+        320,312,305,298,291,284,278,271,265,259,507,496,485,475,465,456,
+        446,437,428,420,412,404,396,388,381,374,367,360,354,347,341,335,
+        329,323,318,312,307,302,297,292,287,282,278,273,269,265,261,512,
+        505,497,489,482,475,468,461,454,447,441,435,428,422,417,411,405,
+        399,394,389,383,378,373,368,364,359,354,350,345,341,337,332,328,
+        324,320,316,312,309,305,301,298,294,291,287,284,281,278,274,271,
+        268,265,262,259,257,507,501,496,491,485,480,475,470,465,460,456,
+        451,446,442,437,433,428,424,420,416,412,408,404,400,396,392,388,
+        385,381,377,374,370,367,363,360,357,354,350,347,344,341,338,335,
+        332,329,326,323,320,318,315,312,310,307,304,302,299,297,294,292,
+        289,287,285,282,280,278,275,273,271,269,267,265,263,261,259};
+        
+   
+int shg_table = {
+	     9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 
+		17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 
+		19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20,
+		20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21,
+		21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21,
+		21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 
+		22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
+		22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 
+		23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+		23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+		23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 
+		23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 
+		24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+		24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+		24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+    24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24 };
+    
+
+
+
+void compoundBlurImage( imageID, canvasID, radiusData, minRadius, increaseFactor, blurLevels, blurAlphaChannel )
+{
+			
+ 	var img = document.getElementById( imageID );
+	var w = img.naturalWidth;
+    var h = img.naturalHeight;
+       
+	var canvas = document.getElementById( canvasID );
+      
+    canvas.style.width  = w + "px";
+    canvas.style.height = h + "px";
+    canvas.width = w;
+    canvas.height = h;
+    
+    var context = canvas.getContext("2d");
+    context.clearRect( 0, 0, w, h );
+    context.drawImage( img, 0, 0 );
+
+	if ( isNaN(minRadius) || minRadius <= 0 || isNaN(increaseFactor) || increaseFactor == 0 ) return;
+	
+	if ( blurAlphaChannel )
+		compundBlurCanvasRGBA( canvasID, 0, 0, w, h, radiusData, minRadius, increaseFactor, blurLevels );
+	else 
+		compundBlurCanvasRGB( canvasID, 0, 0, w, h, radiusData, minRadius, increaseFactor, blurLevels );
+}
+
+*/
+
+
 }

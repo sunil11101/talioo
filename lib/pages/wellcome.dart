@@ -125,6 +125,7 @@ class _WellComePageState extends State<WellComePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: uI == 0 ? welcomeUI() 
+       //body: uI ==0 ? afterSuccess()
         
         : uI1 == 0 ? loadingUI() :
         

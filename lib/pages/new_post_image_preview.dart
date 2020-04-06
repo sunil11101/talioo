@@ -295,7 +295,7 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                                     widget.post.imagesFileList[listIndex].saturation = value;
                                   });
                                 }
-                                _imageRefresher.updateImage(widget.post.imagesFileList, listIndex, brightness, contrast, saturation, widget.post.imagesFileList[listIndex].tiltX, widget.post.imagesFileList[listIndex].tiltY, widget.post.imagesFileList[listIndex].tiltRadius, context);
+                                //_imageRefresher.updateImage(widget.post.imagesFileList, listIndex, brightness, contrast, saturation, widget.post.imagesFileList[listIndex].tiltX, widget.post.imagesFileList[listIndex].tiltY, widget.post.imagesFileList[listIndex].tiltRadius, context);
                                 //updatePicutre(widget.post.imagesFileList[listIndex].imagePath, widget.post.imagesFileList[listIndex].brightness, value);
                                 //dddddd;
                               },
@@ -306,6 +306,7 @@ class NewPostImagePreviewPageState extends State<NewPostImagePreviewPage> with S
                                 onTap: () {
                                   setState(() {
                                     showSlider = false;
+                                     _imageRefresher.updateImage(widget.post.imagesFileList, listIndex, 50.0, 50.0, 50.0, widget.post.imagesFileList[listIndex].tiltX, widget.post.imagesFileList[listIndex].tiltY, 20.0, context);
                                     imageEditType = "";
                                   });
                                 },
@@ -398,10 +399,10 @@ class ImageRefresher {
 
 
   void updateImage(List<ImgFile> imgFileList, int listIdx, double brightness, double contrast, double saturation, double tiltX, double tiltY, double tiltRadius, context)  async{
-    print("BRI"+brightness.toString());
-    print("SAT"+saturation.toString());
-    File f = await FlutterNativeImage.adjustBrightness(imgFileList[listIdx].imagePath, brightness, contrast, saturation, tiltX, tiltY, tiltRadius);
-    //FileImage fileImg = FileImage(f);
+    print("BRI"+tiltRadius.toString());
+    print("SAT"+tiltY.toString());
+    File f = await FlutterNativeImage.adjustBrightness(imgFileList[listIdx].imagePath, brightness, contrast, saturation, 300, 300, tiltRadius);
+    FileImage fileImg = FileImage(f);
     Image img = Image.file(f, gaplessPlayback: true, fit: BoxFit.cover,);
     imgFileList[listIdx].image = img;
 
